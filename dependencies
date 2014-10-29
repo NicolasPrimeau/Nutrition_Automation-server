@@ -1,0 +1,15 @@
+The following is a list of requreid packages. An installation script will be created later
+to automatically install these non default packages:
+
+Meta:
+
+-pip: 
+    debian: apt-get python-pip
+    
+
+Python:
+
+-Mongo DB interface - pymongo
+
+
+

@@ -11,5 +11,11 @@ Python:
 
 -Mongo DB interface - pymongo
 
+Other:
+
+-Must build mongoDB from :
+    -https://launchpad.net/ubuntu/+source/mongodb/1:2.0.4-1ubuntu2
+  Instructions
+    -http://www.mongodb.org/about/contributors/tutorial/build-mongodb-from-source/
 
 

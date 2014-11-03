@@ -4,10 +4,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-
-def main():
-  _send_text()
-  _send_email()
+__host_email_address = "NAS@localhost"
 
 
 def _send_text():
@@ -15,12 +12,29 @@ def _send_text():
   raise NotImplementedError
 
 
-def _send_email():
-  print("Sending email")
-  raise NotImplementedError
+def _send_email(address,subject,message):
+  print("Sending Email")
+
+  me = __host_email_address
+  you = address;
+  
+  msg = MIMMultipart('alternative')
+  msg= ['Subject'] = subject
+  text = message['plain']
+  html = message['html']
+  part1 = MIMEText(text, 'plain')
+  part2 = MIMEText(html, 'html')
+
+  msg.attach(part1)
+  msg.attach(part2)
+
+  s = smtplib.SMTP('localhost')
+
+  s.sendmail(me,you,msg.as_string())
+  s.quit()
+
+  raise Warning('Send email not tested')
 
 
-if __name__ == "__main__":
-  main()
 
 

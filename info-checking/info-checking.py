@@ -1,29 +1,26 @@
 #Checks the consistency of database software
 
-
-def main():
-  check_data()
-  _time_check()
-  _consistency_check()
-  __timer()
+import database
+import alert_module
 
 def check_data():
-  print("Checking data")
-  raise NotImplementedError;
+  message = _alert_check()
+  if message:
+    alert_module.send_email(message['address'],message['header'],message['content'])
 
-def _time_check():
-  print("Time Check")
-  raise NotImplementedError
-
-def _consistency_check():
-  pritn("Checking Consistency")
-  raise NotImplementedError
-
-def __timer()
-  print("Data consistency timer")
-  raise NotImplementedError
+__check_alert(alert, food_item):
+  raise NotImplementedError()  
 
 
-if __name__ == "__main__":
-  main()
+
+def _alert_check():
+  alerts = database.get_data("if is alert") #fix
+  
+  for alert in alerts:
+    print("alert")
+    __check_alert(alert, food_item)
+
+
+  
+
 

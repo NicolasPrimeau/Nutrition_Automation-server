@@ -52,8 +52,6 @@ def cleanup():
   raise NotImplementedError
 
 def _setup():
-  
-
   print("Setting up database")
   raise NotImplementedError
 

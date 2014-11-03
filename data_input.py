@@ -1,17 +1,14 @@
 #Decodes incoming data
 
-import database_interface
-from socket import *
-
-def __main():
+def startServer():
+  import database_interface
+  from socket import * 
   HOST = '' 
   PORT = 50001
   ADDR = (HOST, PORT)
   BUFSIZE = 1024
   serv = socket (AF_INET, SOCK_STREAM)
   serv.bind((ADDR))
-
-  
 
   while 1:
     #MODIFY if we are to allow additional data acquistion clients
@@ -40,9 +37,5 @@ def format(data):
   #!!IMPLEMENT
   #formatting hapens here
   return data
-
-
-if __name__ == "__main__":
-  __main()
 
 

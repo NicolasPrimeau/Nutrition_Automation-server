@@ -7,19 +7,19 @@ from email.mime.text import MIMEText
 __host_email_address = "NAS@localhost"
 
 
-def _send_text():
+def send_text():
   print("Sending text")
   raise NotImplementedError
 
 
-def _send_email(address,subject,message):
+def send_email(address,subject,message):
   print("Sending Email")
 
   me = __host_email_address
   you = address;
   
   msg = MIMMultipart('alternative')
-  msg= ['Subject'] = subject
+  msg['Subject'] = subject
   text = message['plain']
   html = message['html']
   part1 = MIMEText(text, 'plain')

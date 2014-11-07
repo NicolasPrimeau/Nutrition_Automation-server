@@ -1,8 +1,16 @@
-#Decodes incoming data
+#The protocol to be used for now to test is the following:
+#-Incoming data must be plain text
+#-The text will be JSON
+
+from socket import *
+import database_interface
+import signal
+import errno
+import sys
+import time
 
 def startServer():
-  import database_interface
-  from socket import * 
+
   HOST = '' 
   PORT = 50001
   ADDR = (HOST, PORT)
@@ -10,32 +18,42 @@ def startServer():
   serv = socket (AF_INET, SOCK_STREAM)
   serv.bind((ADDR))
 
+  def itrp_handler(signum,frame):
+    sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
+    sys.stdout.write("Terminating server process...")
+    serv.close()
+    sys.stdout.write("Terminated!\n")
+    sys.exit()
+
+ 
+  signal.signal(signal.SIGINT, itrp_handler)
+  signal.signal(signal.SIGTERM, itrp_handler)
+  signal.signal(signal.SIGQUIT, itrp_handler)
+
   while 1:
     #MODIFY if we are to allow additional data acquistion clients
     serv.listen(1)
 
     conn, addr = serv.accept()
+
     print("Accepted connection")
   
     while 1:
       data = conn.recv(BUFSIZE)
       if not data:
         break
-      data_router.save_data()
-
-      database.store_data(format(decode_data(data)),database.FOOD)  
-    
+      
+      database_interface.store_data(decode_data(data),database.FOOD)  
+  
 #Decode from protocol, convert into dictionary
 def decode_data(data):
   #!!IMPLEMENT
-  #Implement later when proper protocol is established
-  return data
+  #Implement properly later when proper protocol is established
 
+  #test implementation
+  import simplejson
 
-#Format dictionary into proper JSON
-def format(data):
-  #!!IMPLEMENT
-  #formatting hapens here
-  return data
+  return json.loads(data)[0]
+
 
 

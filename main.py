@@ -7,55 +7,100 @@ from multiprocessing import Process,Queue
 import sys
 import time
 import database_interface
+import info_checking
+import signal
+import data_input
+import errno 
 
 def main():
+
+  processes = []
 
   #setup database/ check for proper setup
   setup_p = Process(target = setup)
   setup_p.start()
   setup_p.join()
 
-  #start info checking,data management
-  data_p = Process(target=data_manager)
-  data_p.start()
+  del setup_p
+
+  #Start Info checking
+  #!! Not Implemented !!
+  processes.append(Process(target=check_info))
+
+  #start Database Management
+  # !! Not Implemented !!
+  processes.append(Process(target = database_management))
+
   #start TCP server
-  server_p = Process(target=start_server)
-  server_p.start()
+  processes.append(Process(target=start_server))
 
   #Start GUI
+  # !! Not implemented !!
+  #processes.append(Process(target=start_gui))
 
-  server_p.join()
-  data_p.join()
+  for p in processes:
+    p.start()
+
+  for p in processes:
+    p.join()
+
+  sys.stderr.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
+  sys.stderr.write("Error - Nutrition System terimnated\n")
   
 def setup():
+  sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
   sys.stdout.write("Initializating...")
   database_interface.__setup()
 
   sys.stdout.write("Complete!\n")
 
-#Data manager
-def data_manager():
-  import info_checking.py
+#Info Checking
+def check_info():
+  signal.signal(signal.SIGINT,check_info_exit_handler)
+  signal.signal(signal.SIGTERM, check_info_exit_handler)
+  signal.signal(signal.SIGQUIT, check_info_exit_handler)
+
   while 1:
     #do info check
+    sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
     sys.stdout.write("Checking data...")
     info_checking.check_data()
     sys.stdout.write("Complete!\n")
-    sys.stdout.write("Cleaning database...")
-    database_interface.cleanup()
-    sys.stdout.write("Complete!\n")
     #sleep
-    time.sleep()
+    time.sleep(7200)
+
+def check_info_exit_handler(signum,frame):
+  sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
+  sys.stdout.write("Terminating info checking process...")
+  sys.stdout.write("Terminated!\n")
+  sys.exit()
+
+def database_management():
+  signal.signal(signal.SIGINT, database_management_exit_handler)
+  signal.signal(signal.SIGTERM, database_management_exit_handler)
+  signal.signal(signal.SIGQUIT, database_management_exit_handler)
+
+  while 1:
+    #cleanup database
+    sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
+    sys.stdout.write("Cleaning up database...")
+    database_interface._cleanup()
+    sys.stdout.write("Complete!\n")
+    time.sleep(24*60*60)    
+
+def database_management_exit_handler(signum, frame):
+  sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
+  sys.stdout.write("Terminating database management process...")
+  sys.stdout.write("Terminated!\n")
+  sys.exit()
 
 
 def start_server():
-  import data_input
   while 1:
-    sys.stdout.write("Data input server  --  Started\n")
-    try:
-      data_input.startServer()
-    except Error:
-      sys.stderr.write("Warning: Server crashed. Restarting Server\n")
+    sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
+    sys.stdout.write("Data input server -- Started\n")
+    
+    data_input.startServer()
 
     #We should never reach this point, 
     #the loop is completely for redundancy

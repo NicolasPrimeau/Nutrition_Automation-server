@@ -9,11 +9,11 @@ def check_data():
   #process time alerts
   alerts = database_interface.get_data(database_interface.ALERT)
   messages = []
-  for alert in alerts:
-    if alert['type'] == 'time':
-      messages.append(_check_time_alert(alert))
-    elif alert['type'] == 'quantity':
-      messages.append(_check_quantity_alert(alert))
+  for a in alerts:
+    if a['type'] == 'time':
+      messages.append(_check_time_alert(a))
+    elif a['type'] == 'quantity':
+      messages.append(_check_quantity_alert(a))
   
   #distille the messages
 
@@ -21,7 +21,8 @@ def check_data():
   # For now just send all emails
    
   for msg in messages:
-    alert.send_email(msg['address'],msg['subject'],msg['address'])
+    for a in msg:
+      alert.send_email(a['address'],a['subject'],a['address'])
 
 
   
@@ -53,16 +54,13 @@ def _check_time_alert(alert):
   database_interface.get_data(query)
 
 def _check_quantity_alert(alert):
-  # !! remove later !!
-  raise NotImplementedError
-  # !!              !!
-
 
   time = datetime.datetime.now() - datetime.timedelta(hours=2)
   
   query = {}
   query['number'] = {}
-  query['number']['$in'] = alert['target_bins']
+  if alert['target_bins'] != -1:
+    query['number']['$in'] = alert['target_bins']
   query['date'] = {'$gte':time}
   
   data = database_interface.get_data(database_interface.FOOD,query)
@@ -94,7 +92,7 @@ def _check_quantity_alert(alert):
   problems = []
 
   for key,d in stats_data:
-    if stats_data[key]['avg'] < alert['flag']['quantity'] and stats[key]['last_reading'] < alert['flag']['quantity']:
+    if stats_data[key]['avg'] < alert['flag']['min'] and stats[key]['last_reading'] < alert['flag']['min']:
       problems.append(__create_quantity_message({"bin" : key, "quantity" : stats_data[key]['avg'], "date" : stats_data[key]['last_reading_date']}, alert))
 
   return problems

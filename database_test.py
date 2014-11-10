@@ -2,27 +2,30 @@
 
 import database_interface
 
-test_data = {}
-test_data['name'] = "helloworld"
-test_data['value'] = 12345
 
-t2 = {}
-t2['name'] = "banana"
-t2['value'] = 565656
+contact = {}
+contact['name'] = "Nicolas Primeau"
+contact['phone'] = "613-915-7187"
+contact['email'] = "nicolas.primeau@gmail.com"
 
 #store data
-database_interface.store_data(database_interface.FOOD,test_data)
-database_interface.store_data(database_interface.FOOD,t2)
+#database_interface.store_data(database_interface.CONTACT,contact)
 
-#get data
-items = database_interface.get_data(database_interface.FOOD)
+alarm = {}
+alarm['description'] = "General catch all alarm for testing"
+alarm['type'] = "quantity"
+alarm['flag'] = {}
+alarm['flag']['max'] = 100
+alarm['flag']['min'] = 20
+alarm['target_bins'] = []
+alarm['target_bins'] = -1
+alarm['contact'] = []
+c = {}
+c['name'] = "Nicolas Primeau"
+c['email'] = True
+c['phone'] = False
 
-for item in items:
-  print item['name']
-  print item['value']
+alarm['contact'].append(c)
 
+database_interface.store_data(database_interface.ALERT, alarm)
 
-#remove
-for item in items:
-  database_interface.__remove(database_interface.FOOD, item)
-  

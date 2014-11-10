@@ -18,7 +18,7 @@ def send_email(address,subject,message):
   me = __host_email_address
   you = address;
   
-  msg = MIMMultipart('alternative')
+  msg = MIMEMultipart('alternative')
   msg['Subject'] = subject
   text = message['plain']
   html = message['html']
@@ -32,9 +32,4 @@ def send_email(address,subject,message):
 
   s.sendmail(me,you,msg.as_string())
   s.quit()
-
-  raise Warning('Send email not tested')
-
-
-
 

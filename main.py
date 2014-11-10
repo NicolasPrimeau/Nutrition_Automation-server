@@ -2,7 +2,6 @@
 #A sort of API to the core modules of the software. Additional modules should only use the following functions or else
 #there will be unexpected behaviour
 
-#Might be more useful
 from multiprocessing import Process,Queue
 import sys
 import time

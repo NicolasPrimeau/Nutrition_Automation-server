@@ -63,9 +63,10 @@ def check_info():
   while 1:
     #do info check
     sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
-    sys.stdout.write("Checking data...")
+    sys.stdout.write("Checking data...\n")
     info_checking.check_data()
-    sys.stdout.write("Complete!\n")
+    sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
+    sys.stdout.write("Checking data... Complete!\n")
     #sleep
     time.sleep(7200)
 
@@ -75,6 +76,7 @@ def check_info_exit_handler(signum,frame):
   sys.stdout.write("Terminated!\n")
   sys.exit()
 
+#Database handler
 def database_management():
   signal.signal(signal.SIGINT, database_management_exit_handler)
   signal.signal(signal.SIGTERM, database_management_exit_handler)
@@ -83,9 +85,10 @@ def database_management():
   while 1:
     #cleanup database
     sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
-    sys.stdout.write("Cleaning up database...")
+    sys.stdout.write("Cleaning up database...\n")
     database_interface._cleanup()
-    sys.stdout.write("Complete!\n")
+    sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
+    sys.stdout.write("Cleaning up database... Complete!\n")
     time.sleep(24*60*60)    
 
 def database_management_exit_handler(signum, frame):
@@ -94,11 +97,11 @@ def database_management_exit_handler(signum, frame):
   sys.stdout.write("Terminated!\n")
   sys.exit()
 
-
+#TCP Server handler
 def start_server():
   while 1:
     sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
-    sys.stdout.write("Data input server -- Started\n")
+    sys.stdout.write("Data input server... Started\n")
     
     data_input.startServer()
 

@@ -4,7 +4,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-__host_email_address = "NAS@localhost"
+__host_email_address = "NAS@raspberrypi"
 
 
 def send_text():
@@ -13,7 +13,6 @@ def send_text():
 
 
 def send_email(address,subject,message):
-  print("Sending Email")
 
   me = __host_email_address
   you = address;
@@ -28,8 +27,10 @@ def send_email(address,subject,message):
   msg.attach(part1)
   msg.attach(part2)
 
-  s = smtplib.SMTP('localhost')
-
+  s = smtplib.SMTP('smtp.gmail.com', 587)
+  s.starttls()
+  s.login('nutrition.automation@gmail.com', 'nutrition_automation')
+#  s = smtplib.SMTP('127.0.0.1')
   s.sendmail(me,you,msg.as_string())
-  s.quit()
+  s.close()
 

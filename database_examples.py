@@ -40,7 +40,7 @@ food['food']['name'] = 'Apple'
 food['food']['type'] = 'Fruit'
 food['food']['perishable'] = True
 
-#database_interface.store_data(database_interface.FOOD, food)
+database_interface.store_data(database_interface.FOOD, food)
 
 
 

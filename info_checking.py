@@ -62,8 +62,8 @@ def _check_quantity_alert(alert):
   
   query = {}
   if alert['target_bins'] != -1:
-    query['number'] = {}
-    query['number']['$in'] = alert['target_bins']
+    query['bin'] = {}
+    query['bin']['$in'] = alert['target_bins']
   query['date'] = {'$gte':time}
   
   data = database_interface.get_data(database_interface.FOOD,query)
@@ -72,19 +72,19 @@ def _check_quantity_alert(alert):
   #gather preliminary information
 
   for d in data:
-    if d['number'] not in stats_data:
-      stats_data[d['number']] = {}
-      stats_data[d['number']]['avg'] = 0
-      stats_data[d['number']]['last_reading_date'] = d['date']
-      stats_data[d['number']]['last_reading'] = d['quantity']
-      stats_data[d['number']]['num'] = 0
+    if d['bin'] not in stats_data:
+      stats_data[d['bin']] = {}
+      stats_data[d['bin']]['avg'] = 0
+      stats_data[d['bin']]['last_reading_date'] = d['date']
+      stats_data[d['bin']]['last_reading'] = d['quantity']
+      stats_data[d['bin']]['num'] = 0
 
-    stats_data[d['number']]['avg'] += d['quantity']
-    stats_data[d['number']]['num'] += 1
+    stats_data[d['bin']]['avg'] += d['quantity']
+    stats_data[d['bin']]['num'] += 1
  
-    if d['date'] > stats_data[d['number']]['last_reading_date']:
-      stats_data[d['number']]['last_reading'] = d['quantity']
-      stats_data[d['number']]['last_reading_date'] = d['date']
+    if d['date'] > stats_data[d['bin']]['last_reading_date']:
+      stats_data[d['bin']]['last_reading'] = d['quantity']
+      stats_data[d['bin']]['last_reading_date'] = d['date']
 
   # Finalize the average computation
 

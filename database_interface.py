@@ -7,6 +7,7 @@ import sys
 FOOD = "food"
 ALERT = "alert"
 CONTACT = "contact"
+CONFIG = "config"
 
 __DATABASE = "Nutrition_Automation"
 
@@ -14,6 +15,7 @@ collections = {}
 collections[FOOD] = "food_data"
 collections[ALERT] = "alerts"
 collections[CONTACT] = "contacts" 
+collections[CONFIG] = "config"
 
 def __setup():
   # Actually, we don't need any setup up
@@ -24,7 +26,7 @@ def __setup():
 
 #Data is a dictionary, type is a string or integer
 def store_data( type, data):
-  if isinstance(data,dict) and (type == FOOD or type == ALERT or type == CONTACT):
+  if isinstance(data,dict) and type in collections:
     client = MongoClient()
     db = client[__DATABASE]
     collection = db[collections[type]]
@@ -34,7 +36,7 @@ def store_data( type, data):
     raise LookupError("No Such Collection")
   
 def get_data(type,query = {},single = False):
-  if type == FOOD or type == ALERT or type == CONTACT:
+  if type in collections:
     client = MongoClient()
     db = client[__DATABASE]
     collection = db[collections[type]]
@@ -57,11 +59,19 @@ def get_data(type,query = {},single = False):
 
 #cleanup removes all Food entries
 
+def update(query,update):
+    if type in collections:
+      client = MongoClient()
+      db = client[__DATABASE]
+      collection = db[collections[type]]
+      collection.update(query,update)
+      client.close() 
+
 def _cleanup():
   day = datetime.datetime.now() - datetime.timedelta(days = 30)
   query = {}
   query['date'] = {'$lte':day}
-  
+    
   __remove(FOOD, query)
 
 #query is a dictionary with the elements to choose from

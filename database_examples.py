@@ -32,15 +32,21 @@ alarm['contact'].append(c)
 import datetime
 
 food = {}
-food['number'] = 1
+food['bin'] = 1
 food['quantity'] = 0
 food['date'] = datetime.datetime.now()
-food['food'] = {}
-food['food']['name'] = 'Apple'
-food['food']['type'] = 'Fruit'
-food['food']['perishable'] = True
 
 database_interface.store_data(database_interface.FOOD, food)
+
+config = {}
+config['bin'] = 1
+config['name'] = 'Apple'
+config['type'] = 'Fruit'
+config['perishable'] = True
+
+database_interface.store_data(database_interface.CONFIG, config)
+
+
 
 
 

@@ -6,12 +6,16 @@ from email.mime.text import MIMEText
 import httplib, urllib
 __host_email_address = "NAS@raspberrypi"
 
+__REGION = "Canada"
 
 def send_text(numstring,message):
    params = urllib.urlencode({'number': numstring, 'message': message})
    headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
    conn = httplib.HTTPConnection("textbelt.com:80")
-   conn.request("POST", "/canada", params, headers)
+   if __REGION == "Canada":
+     conn.request("POST", "/canada", params, headers)
+   else:
+     conn.request("POST", "/text", params, headers)
    response = conn.getresponse()
    return response.status, response.reason
 

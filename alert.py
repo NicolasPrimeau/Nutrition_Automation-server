@@ -3,13 +3,19 @@
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-
+import httplib, urllib
 __host_email_address = "NAS@raspberrypi"
 
 
-def send_text():
-  print("Sending text")
-  raise NotImplementedError
+def send_text(numstring,message):
+   params = urllib.urlencode({'number': numstring, 'message': message})
+   headers = {"Content-type": "application/x-www-form-urlencoded", "Accept": "text/plain"}
+   conn = httplib.HTTPConnection("textbelt.com:80")
+   conn.request("POST", "/canada", params, headers)
+   response = conn.getresponse()
+   return response.status, response.reason
+
+
 
 
 def send_email(address,subject,message):

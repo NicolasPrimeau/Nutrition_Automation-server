@@ -6,7 +6,8 @@ import datetime
 
 def check_data():
 
-  #process time alerts
+  consistency_check()
+
   alerts = database_interface.get_data(database_interface.ALERT)
   messages = []
   for a in alerts:
@@ -108,7 +109,56 @@ def _check_quantity_alert(alert):
 
 
 def consistency_check():
-  raise NotImplementedError
+  time = datetime.datetime.now() - datetime.timedelta(hours=2)
+
+  query = {}
+  query['date'] = {'$gte':time}
+
+  data = database_interface.get_data(database_interface.FOOD, query)
+
+  stats_data = {}
+
+  # setup data, setup avg
+
+  for item in data:
+  
+    if item['bin'] not in stats_data:
+      stats_data[item['bin']] = {}
+      stats_data[item['bin']]['avg'] = 0.0
+      stats_data[item['bin']]['cnt'] = 0
+      stats_data[item['bin']]['std_dev'] = 0
+      stats_data[item['bin']]['conern_cnt'] = 0
+    stats_data[item['bin']]['avg'] += item['quantity']
+    stats_data[item['bin']]['cnt'] += 1  
+
+  # calc average
+
+  for key,stats in stats_data:
+    stats_data[key]['avg'] /= stats_data[item['bin']]['cnt']
+    
+
+  # calc raw standard variance, not divded
+
+  for item in data:
+    stats_data[item['bin']]['std_dev'] += (item['quantity'] - stats_data[item['bin']]['avg'])**2 
+    
+  # calc std dev
+
+  for key, stats in stats_data:
+    stats_data[key]['std_dev'] = (stats_data[key]['std_dev'] / (stats_data[key]['cnt']-1) )**(1/2)
+
+  ## Check the amount of outliers
+
+  for item in data:
+    if item['quantity'] > 2*stats_data[item['bin']]['std_dev']:
+      stats_data[item['bin']]['concern_cnt'] += 1
+
+  # print results
+
+  for key,stat in stats_data:
+    if stat['concern_cnt'] > 4:
+      print ("Bin " + str(item['bin']) + " has highly inconsistent data")
+
 
 def __create_quantity_message(info,alert):
   names = []

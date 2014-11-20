@@ -52,8 +52,12 @@ def decode_data(data):
 
   #test implementation
   import simplejson
+  import datetime
 
-  return json.loads(data)[0]
+  info = json.load(data)[0]
+  info['date'] = datetime.datetime.now()
+
+  return info
 
 
 

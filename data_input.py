@@ -42,8 +42,7 @@ def startServer():
       data = conn.recv(BUFSIZE)
       if not data:
         break
-      
-      database_interface.store_data(decode_data(data),database.FOOD)  
+      database_interface.store_data(database_interface.FOOD,decode_data(data))
   
 #Decode from protocol, convert into dictionary
 def decode_data(data):
@@ -51,10 +50,9 @@ def decode_data(data):
   #Implement properly later when proper protocol is established
 
   #test implementation
-  import simplejson
+  import json
   import datetime
-
-  info = json.load(data)[0]
+  info = json.loads(data)
   info['date'] = datetime.datetime.now()
 
   return info

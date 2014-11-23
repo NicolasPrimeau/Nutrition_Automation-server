@@ -33,7 +33,7 @@ import datetime
 
 food = {}
 food['bin'] = 1
-food['quantity'] = 0
+food['quantity'] = 19
 food['date'] = datetime.datetime.now()
 
 database_interface.store_data(database_interface.FOOD, food)

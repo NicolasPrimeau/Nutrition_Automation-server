@@ -12,22 +12,31 @@ def check_data():
   messages = []
   for a in alerts:
     if a['type'] == 'time':
-      messages.append(_check_time_alert(a))
+      x = _check_time_alert(a)
+      if len(x) != 0:
+        messages.append(x)
     elif a['type'] == 'quantity':
-      messages.append(_check_quantity_alert(a))
+      x = _check_quantity_alert(a)
+      if len(x) != 0:
+        messages.append(x)
   
   #distille the messages
   ## !! Implement later !!
   # For now just send all emails
-   
-  for msg in messages:
-    for a in msg:
+  
+  if len(messages) != 0: 
+    database_interface.update(database_interface.DETECTED_CONCERNS,{},{'info' : messages, 'date' : datetime.datetime.now()}, create=True)
+
+  # Alert_set is a set of flags raised by one configured alert
+  for alert_set in messages:
+    # We process every alert in the set seperately
+    for a in alert_set:
       #For now !! Remove later
       print("\n\nAddress: " +  ", ".join(a['address']))
       print("Subject: " + a['subject'])
       print("Message: " +a['message']['plain'])
       
-      alert.send_email(a['address'],a['subject'],a['message'])
+#      alert.send_email(a['address'],a['subject'],a['message'])
 
   
 def _check_time_alert(alert):
@@ -127,13 +136,13 @@ def consistency_check():
       stats_data[item['bin']]['avg'] = 0.0
       stats_data[item['bin']]['cnt'] = 0
       stats_data[item['bin']]['std_dev'] = 0
-      stats_data[item['bin']]['conern_cnt'] = 0
+      stats_data[item['bin']]['concern_cnt'] = 0
     stats_data[item['bin']]['avg'] += item['quantity']
     stats_data[item['bin']]['cnt'] += 1  
 
   # calc average
 
-  for key,stats in stats_data:
+  for key,stats in stats_data.iteritems():
     stats_data[key]['avg'] /= stats_data[item['bin']]['cnt']
     
 
@@ -144,8 +153,9 @@ def consistency_check():
     
   # calc std dev
 
-  for key, stats in stats_data:
-    stats_data[key]['std_dev'] = (stats_data[key]['std_dev'] / (stats_data[key]['cnt']-1) )**(1/2)
+  for key, stats in stats_data.iteritems():
+
+    stats_data[key]['std_dev'] = (stats_data[key]['std_dev'] / (stats_data[key]['cnt']-stats_data[key]['cnt']!=1) )**(1/2)
 
   ## Check the amount of outliers
 
@@ -155,7 +165,7 @@ def consistency_check():
 
   # print results
 
-  for key,stat in stats_data:
+  for key,stat in stats_data.iteritems():
     if stat['concern_cnt'] > 4:
       print ("Bin " + str(item['bin']) + " has highly inconsistent data")
 
@@ -175,7 +185,7 @@ def __create_quantity_message(info,alert):
   for cont in contacts:
     msg['address'].append(cont['email'])
   
-  msg['subject'] = "Nutrition Automation Alert - Low Quantity of item"
+  msg['subject'] = "Low Stock - Bin " + str(info['bin']);
 
   msg['message'] = {}
 

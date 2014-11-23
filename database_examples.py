@@ -44,7 +44,7 @@ config['name'] = 'Apple'
 config['type'] = 'Fruit'
 config['perishable'] = True
 
-database_interface.store_data(database_interface.CONFIG, config)
+#database_interface.store_data(database_interface.CONFIG, config)
 
 
 

@@ -3,6 +3,7 @@
 import database_interface
 import alert
 import datetime
+import custom_functions
 
 def check_data():
 
@@ -44,27 +45,34 @@ def _check_time_alert(alert):
   raise NotImplementedError
   # !!              !!
 
+
+  time_delta = datetime.datetime.now() - datetime.timedelta(weeks = alert['flag']['week'], days = alert['flag']['day'], hours=alert['flag']['hour'] )
+
   query = {}
   query['number'] = {}
   query['number']['$in'] = alert['target_bins']
-    
+  query['date'] = {}
+  query['date'] = {'$gte': time_delta} 
 
-  #if month difference is bigger than what is specified in the alert
-  if "month" in alert['flag']:
-    pass  
+  data = database_interface.get_data(database_interface.FOOD, query)
 
+  temp_ar = {}  
 
-  #if day difference is bigger than what is specified in the alert
-  if "day" in alert['flag']:
-    pass
-
-
-  #if hour difference is bigger than what is specified in the alert 
-  if "hour" in alert['flag']:
-    pass
+  for el in data:
+    if el['bin'] not in temp_ar:
+      temp_ar[el['bin] = []
+    temp_ar[el['bin']].append(el)
+  
+  data = temp_ar
 
 
-  database_interface.get_data(query)
+  for key,bin in data.iter():
+    data[key] = custom_functions.sort_by_date(bin) 
+
+   
+  // Check bins
+   
+ 
 
 def _check_quantity_alert(alert):
 

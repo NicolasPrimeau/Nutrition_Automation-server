@@ -60,7 +60,7 @@ def _check_time_alert(alert):
 
   for el in data:
     if el['bin'] not in temp_ar:
-      temp_ar[el['bin] = []
+      temp_ar[el['bin']] = []
     temp_ar[el['bin']].append(el)
   
   data = temp_ar
@@ -70,7 +70,7 @@ def _check_time_alert(alert):
     data[key] = custom_functions.sort_by_date(bin) 
 
    
-  // Check bins
+  # Check bins
    
  
 

@@ -23,7 +23,8 @@ def main():
       cmds[cmd]()
     elif cmd in stop_cmds:
       stop_cmds[cmd]  
-
+    else:
+      print("Command not supported")
 
 def start_tcp_server():
   print ("Server started")
@@ -35,6 +36,7 @@ def cleanup_db():
   return
 
 def check_data():
+  info_checking.check_data()
   return
 
 def stop_tcp_server():

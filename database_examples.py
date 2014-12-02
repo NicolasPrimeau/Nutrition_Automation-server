@@ -5,11 +5,11 @@ import database_interface
 
 contact = {}
 contact['name'] = "Nicolas Primeau"
-contact['phone'] = "613-915-7187"
+contact['phone'] = "6139157187"
 contact['email'] = "nicolas.primeau@gmail.com"
 
 #store data
-#database_interface.store_data(database_interface.CONTACT,contact)
+database_interface.store_data(database_interface.CONTACT,contact)
 
 alarm = {}
 alarm['description'] = "General catch all alarm for testing"
@@ -27,7 +27,7 @@ c['phone'] = True
 
 alarm['contact'].append(c)
 
-#database_interface.store_data(database_interface.ALERT, alarm)
+database_interface.store_data(database_interface.ALERT, alarm)
 
 import datetime
 
@@ -36,7 +36,7 @@ food['bin'] = 1
 food['quantity'] = 19.8
 food['date'] = datetime.datetime.now()
 
-#database_interface.store_data(database_interface.FOOD, food)
+database_interface.store_data(database_interface.FOOD, food)
 
 config = {}
 config['bin'] = 1

@@ -37,8 +37,8 @@ def check_data():
       print("Subject: " + a['subject'])
       print("Message: " +a['message']['plain'])
       
-#      alert.send_email(a['address'],a['subject'],a['message'])
-
+      alert.send_email(a['address'],a['subject'],a['message'])
+      alert.send_text(a['phone_num'],a['message'])
   
 def _check_time_alert(alert):
   # !! Remove Later !!
@@ -190,9 +190,12 @@ def __create_quantity_message(info,alert):
   
   msg = {}
   msg['address'] = []
+  msg['phone_num'] = []
   for cont in contacts:
     msg['address'].append(cont['email'])
+    msg['phone_num'].append(cont['phone'])
   
+ 
   msg['subject'] = "Low Stock - Bin " + str(info['bin']);
 
   msg['message'] = {}

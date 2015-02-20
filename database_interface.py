@@ -1,97 +1,134 @@
-#interface to mongoDB
+# interface to mongoDB
 
 from pymongo import MongoClient
 import datetime
-import sys
+import guidelines
+from enum import Enum
+
+
+class CONFIG(Enum):
+    BINS = "config"
+
+
+class GUIDELINES(Enum):
+    SHELF_TIME = "shelf_time"
+
 
 FOOD = "food"
 ALERT = "alert"
 CONTACT = "contact"
-CONFIG = "config"
 DETECTED_CONCERNS = "concerns"
+CLIENTS = "clients"
+
 
 __DATABASE = "Nutrition_Automation"
+# if needed eventually
+__USER = "Nutrition_Automation"
+__PASSWORD = "Nutrition_Automation_Password"
 
-collections = {}
+collections = dict()
 collections[FOOD] = "food_data"
 collections[ALERT] = "alerts"
-collections[CONTACT] = "contacts" 
-collections[CONFIG] = "config"
+collections[CONTACT] = "contacts"
+collections[CONFIG.BINS] = "bins"
 collections[DETECTED_CONCERNS] = "concerns"
+collections[GUIDELINES.SHELF_TIME] = "guidelines_shelf_time"
+collections[CLIENTS] = "clients"
+
 
 def __setup():
-  # Actually, we don't need any setup up
-  # In the case that the database and collections don't exists, 
-  # any function accessing the database would create them implicitly 
-  return
-
-
-#Data is a dictionary, type is a string or integer
-def store_data( type, data):
-  if isinstance(data,dict) and type in collections:
+    # prime database with guideline information
     client = MongoClient()
     db = client[__DATABASE]
-    collection = db[collections[type]]
-    collection.insert(data);
+    collection = db[collections[GUIDELINES.SHELF_TIME]]
+
+    for struct in guidelines.TIME_LENGTHS:
+        collection.remove({'name': struct['name']})
+        collection.insert(struct)
+
     client.close()
-  else:
-    raise LookupError("No Such Collection")
-  
-def get_data(type,query = {},single = False):
-  if type in collections:
-    client = MongoClient()
-    db = client[__DATABASE]
-    collection = db[collections[type]]
-    if not single:
-      if query == {}: 
-        iterator = collection.find()
-      else:
-        iterator = collection.find(query)
-      
-      results = []
-      for ar in iterator:
-        results.append(ar)
-      
+    return
+
+
+# Data is a dictionary, type is a string or integer
+def store_data(ty, data):
+    if isinstance(data, dict) and ty in collections:
+        client = MongoClient()
+        db = client[__DATABASE]
+        collection = db[collections[ty]]
+        collection.insert(data)
+        client.close()
     else:
-      results = collection.find_one(query)
-    client.close()
-    return results
-  else:
-    raise LookupError("No Such Collection")  
+        raise LookupError("No Such Collection")
 
-#cleanup removes all Food entries
 
-def update(type,query,update,create=False):
-    if type in collections:
-      client = MongoClient()
-      db = client[__DATABASE]
-      collection = db[collections[type]]
-      if collection.count() == 0 and create:
-        collection.insert(update)
-      else:
-        collection.update(query,update)
-      client.close() 
+def get_data(ty, query=dict(), single=False):
+    if ty in collections:
+        client = MongoClient()
+        db = client[__DATABASE]
+        collection = db[collections[ty]]
+        if not single:
+            if query == {}:
+                iterator = collection.find()
+            else:
+                iterator = collection.find(query)
+
+            results = list()
+            for ar in iterator:
+                results.append(ar)
+
+        else:
+            results = collection.find_one(query)
+        client.close()
+        return results
+    else:
+        raise LookupError("No Such Collection")
+
+    # cleanup removes all Food entries
+
+
+def update(ty, query, updat, create=False):
+    if ty in collections:
+        client = MongoClient()
+        db = client[__DATABASE]
+        collection = db[collections[ty]]
+        if collection.count() == 0 and create:
+            collection.insert(updat)
+        else:
+            collection.update(query, updat)
+        client.close()
+
+
+def count(ty, query=dict()):
+    if ty in collections:
+        client = MongoClient()
+        db = client[__DATABASE]
+        collection = db[collections[ty]]
+        cnt = collection.count(query)
+        client.close()
+        return cnt
+    else:
+        raise LookupError("No Such Collection")
 
 def _cleanup():
-  day = datetime.datetime.now() - datetime.timedelta(days = 30)
-  query = {}
-  query['date'] = {'$lte':day}
-    
-  __remove(FOOD, query)
+    day = datetime.datetime.now() - datetime.timedelta(days=30)
+    query = dict()
+    query['date'] = {'$lte': day}
+
+    __remove(FOOD, query)
 
 
-#query is a dictionary with the elements to choose from
+# query is a dictionary with the elements to choose from
 
-def __remove(type,query):
-  
-  if type in collections:
-    client = MongoClient()
-    db = client[__DATABASE]
-    collection = db[collections[type]]
-    collection.remove(query)
-    client.close()
-  else:
-    raise LookupError("No Such Collection")  
+def __remove(ty, query):
+    if ty in collections:
+        client = MongoClient()
+        db = client[__DATABASE]
+        collection = db[collections[ty]]
+        collection.remove(query)
+        client.close()
+    else:
+        raise LookupError("No Such Collection")
 
 
 

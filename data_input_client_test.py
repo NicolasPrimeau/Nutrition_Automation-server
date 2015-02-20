@@ -19,7 +19,7 @@ ADDR = (HOST,PORT)
 
 BUFFER_SIZE = 1024
 
-f = {}
+f = dict()
 f['bin'] = 1
 f['quantity'] = 20
 

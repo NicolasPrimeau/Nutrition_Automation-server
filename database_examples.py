@@ -3,55 +3,55 @@
 import database_interface
 
 
-contact = {}
+contact = dict()
 contact['name'] = "Nicolas Primeau"
 contact['phone'] = "6139157187"
 contact['email'] = "nicolas.primeau@gmail.com"
 
-#store data
-#database_interface.store_data(database_interface.CONTACT,contact)
+# store data
+# database_interface.store_data(database_interface.CONTACT,contact)
 
-alarm = {}
+alarm = dict()
 alarm['description'] = "General catch all alarm for testing"
 alarm['type'] = "quantity"
-alarm['flag'] = {}
+alarm['flag'] = dict()
 alarm['flag']['max'] = 100.0
 alarm['flag']['min'] = 20.0
-alarm['target_bins'] = [1,2]
-alarm['contact'] = []
-c = {}
+alarm['target_bins'] = [1, 2]
+alarm['contact'] = list()
+c = dict()
 c['name'] = "Nicolas Primeau"
 c['email'] = True
 c['phone'] = True
 
 alarm['contact'].append(c)
 
-#database_interface.store_data(database_interface.ALERT, alarm)
+database_interface.store_data(database_interface.ALERT, alarm)
 
 import datetime
 
-food = {}
+food = dict()
 food['bin'] = 2
 food['quantity'] = 21.0
 food['date'] = datetime.datetime.now()
 
-database_interface.store_data(database_interface.FOOD, food)
+#database_interface.store_data(database_interface.FOOD, food)
 
-config = {}
+config = dict()
 config['bin'] = 1
 config['name'] = 'Apple'
 config['type'] = 'Fruit'
 config['perishable'] = True
 
-#database_interface.store_data(database_interface.CONFIG, config)
+#database_interface.store_data(database_interface.CONFIG.BINS, config)
 
-config={}
+config = dict()
 config['bin'] = 2
 config['name'] = "Banana"
 config['type'] = "Fruit"
 config['perishable'] = True
 
-#database_interface.store_data(database_interface.CONFIG, config)
+#database_interface.store_data(database_interface.CONFIG.BINS, config)
 
 
 

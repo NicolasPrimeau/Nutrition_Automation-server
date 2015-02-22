@@ -1,0 +1,53 @@
+#:kivy 1.8.0
+
+<MainScreen>:
+    MainGrid:
+        rows:1
+        cols:3
+        padding:10
+        spacing:10
+
+        Button:
+            size_hint: 0.25, 0.25
+            background_normal: "Images/blank.png"
+            on_press:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'alert'
+            Image:
+                source:"Images/alert.png"
+                x: self.parent.center_x - self.width/2
+                y: self.parent.center_y - self.height/2
+
+        MainMidGrid:
+            rows:2
+            cols: 1
+            spacing:10
+            size_hint: 0.5, 0.5
+            Button:
+                background_normal: "Images/blank.png"
+                on_press:
+                    root.manager.transition.direction = 'up'
+                    root.manager.current = 'food'
+                Image:
+                    source:"Images/apple.png"
+                    x: self.parent.center_x - self.width/2
+                    y: self.parent.center_y - self.height/2
+
+            Button:
+                background_normal: "Images/blank.png"
+                on_press:
+                    root.manager.transition.direction = 'down'
+                    root.manager.current = 'settings'
+
+        Button:
+            size_hint: 0.25, 0.25
+            background_normal: "Images/blank.png"
+            on_press:
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'settings'
+            Image:
+                source:"Images/gear.png"
+                x: self.parent.center_x - self.width/2
+                y: self.parent.center_y - self.height/2
+
+

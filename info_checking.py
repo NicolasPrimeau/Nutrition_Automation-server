@@ -8,7 +8,7 @@ import guidelines
 
 
 def check_data():
-    consistency_check()
+    #consistency_check()
 
     alerts = database_interface.get_data(database_interface.ALERT)
     messages = list()
@@ -38,8 +38,8 @@ def check_data():
             print("Subject: " + a['subject'])
             print("Message: " + a['message']['plain'])
 
-            alert.send_email(a['address'], a['subject'], a['message'])
-            alert.send_text(a['phone_num'], a['message'])
+            #alert.send_email(a['address'], a['subject'], a['message'])
+            #alert.send_text(a['phone_num'], a['message'])
 
 
 def _check_time_alerts(msgs):
@@ -89,7 +89,7 @@ def _check_time_alerts(msgs):
                 flag = True
                 break
 
-        if not flag:
+        if not flag or True:
             msgs.append(__create_time_message())
 
     return alerts
@@ -183,6 +183,7 @@ def consistency_check():
         stats_data[item['bin']]['cnt'] += 1
 
         # calc average
+
 
     for key, stats in stats_data:
         stats_data[key]['avg'] /= stats_data[item['bin']]['cnt']

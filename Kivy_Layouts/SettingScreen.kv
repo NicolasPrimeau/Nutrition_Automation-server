@@ -1,44 +1,60 @@
 #:kivy 1.8.0
 
-<MainScreen>:
-    MainGrid:
-        rows:2
+<SettingsScreen>:
+    SettingsGrid:
+        rows:1
         cols:2
-        padding:10
         spacing:10
-
-        Button:
-            background_normal: "Images/blank.png"
-            on_press:
-                root.manager.transition.direction = 'up'
-                root.manager.current = 'settings'
-            Image:
-                source:"Images/apple.png"
-                x: self.parent.center_x - self.width/2
-                y: self.parent.center_y - self.height/2
+        padding:10
 
         Button:
             background_normal: "Images/blank.png"
             on_press:
                 root.manager.transition.direction = 'right'
-                root.manager.current = 'settings'
-            Image:
-                source:"Images/alert.png"
-                x: self.parent.center_x - self.width/2
-                y: self.parent.center_y - self.height/2
+                root.manager.current = 'main'
+            text:"Back"
+            color: 0,0,0,1
+            font_size: 30
+            size_hint: 0.25, 0.25
 
-        Button:
-            background_normal: "Images/blank.png"
-            on_press:
-                root.manager.transition.direction = 'down'
-                root.manager.current = 'settings'
-            Image:
-                source:"Images/gear.png"
-                x: self.parent.center_x - self.width/2
-                y: self.parent.center_y - self.height/2
-
-        Button:
-            on_press:
-                root.manager.transition.direction = 'left'
-                root.manager.current = 'settings'
-            background_normal: "Images/blank.png"
+        SettingGrid:
+            rows:4
+            cols:1
+            padding:10
+            spacing:10
+            Button:
+                background_normal: "Images/blank.png"
+                on_press:
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = 'setting_areas'
+                text:"Areas"
+                color: 0,0,0,1
+                font_size: 30
+                size_hint: 0.25, 0.25
+            Button:
+                background_normal: "Images/blank.png"
+                on_press:
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = 'setting_alerts'
+                text:"Alerts"
+                color: 0,0,0,1
+                font_size: 30
+                size_hint: 0.25, 0.25
+            Button:
+                background_normal: "Images/blank.png"
+                on_press:
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = 'setting_contact'
+                text:"Contacts"
+                color: 0,0,0,1
+                font_size: 30
+                size_hint: 0.25, 0.25
+            Button:
+                background_normal: "Images/blank.png"
+                on_press:
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = 'setting_general'
+                text:"General"
+                color: 0,0,0,1
+                font_size: 30
+                size_hint: 0.25, 0.25

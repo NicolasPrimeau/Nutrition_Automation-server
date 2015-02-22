@@ -9,6 +9,7 @@ import database_interface
 import signal
 import info_checking
 import data_input
+from kivy.base import runTouchApp
 import display_controller
 
 

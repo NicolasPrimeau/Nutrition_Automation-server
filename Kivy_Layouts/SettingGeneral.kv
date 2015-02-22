@@ -1,21 +1,24 @@
 #:kivy 1.8.0
 
-<AlertScreen>:
-    AlertGrid:
+<SettingGeneralScreen>:
+    SettingGeneralGrid:
         rows:1
         cols:2
         spacing:10
         padding:10
 
-        MessagesList:
-
         Button:
             background_normal: "Images/blank.png"
             on_press:
-                root.manager.transition.direction = 'left'
-                root.manager.current = 'main'
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'settings'
             text:"Back"
             color: 0,0,0,1
             font_size: 30
             size_hint: 0.25, 0.25
 
+        SettingGeneralNittyGrid:
+            rows:4
+            cols:1
+            padding:10
+            spacing:10

@@ -62,14 +62,18 @@ def store_data(ty, data):
         raise LookupError("No Such Collection")
 
 
-def get_data(ty, query=dict(), single=False):
+def get_data(ty, query=dict(), single=False,sort=""):
     if ty in collections:
         client = MongoClient()
         db = client[__DATABASE]
         collection = db[collections[ty]]
         if not single:
-            if query == {}:
+            if query == {} and not sort == "":
                 iterator = collection.find()
+            elif query == {} and sort != "":
+                iterator = collection.find().sort(sort, 1)
+            elif sort != "":
+                iterator = collection.find(query).sort(sort, 1)
             else:
                 iterator = collection.find(query)
 
@@ -109,6 +113,12 @@ def count(ty, query=dict()):
         return cnt
     else:
         raise LookupError("No Such Collection")
+
+
+def configure_bin(new_bin):
+    update(CONFIG.BINS, {'bin': new_bin['bin']}, new_bin)
+    __remove(FOOD, {'bin': new_bin['bin']})
+
 
 def _cleanup():
     day = datetime.datetime.now() - datetime.timedelta(days=30)

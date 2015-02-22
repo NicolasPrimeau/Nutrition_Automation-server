@@ -26,29 +26,36 @@ c['phone'] = True
 
 alarm['contact'].append(c)
 
-database_interface.store_data(database_interface.ALERT, alarm)
+#database_interface.store_data(database_interface.ALERT, alarm)
 
 import datetime
 
 food = dict()
-food['bin'] = 2
-food['quantity'] = 21.0
+food['bin'] = 1
+food['quantity'] = 10.0
+food['date'] = datetime.datetime.now()
+
+database_interface.store_data(database_interface.FOOD, food)
+
+food = dict()
+food['bin'] = 3
+food['quantity'] = 70.0
 food['date'] = datetime.datetime.now()
 
 #database_interface.store_data(database_interface.FOOD, food)
 
 config = dict()
-config['bin'] = 1
-config['name'] = 'Apple'
-config['type'] = 'Fruit'
+config['bin'] = 3
+config['name'] = 'Steak'
+config['type'] = 'Meat'
 config['perishable'] = True
 
 #database_interface.store_data(database_interface.CONFIG.BINS, config)
 
 config = dict()
-config['bin'] = 2
-config['name'] = "Banana"
-config['type'] = "Fruit"
+config['bin'] = 4
+config['name'] = "Bacon"
+config['type'] = "Meat"
 config['perishable'] = True
 
 #database_interface.store_data(database_interface.CONFIG.BINS, config)

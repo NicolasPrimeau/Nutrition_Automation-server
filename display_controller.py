@@ -173,7 +173,6 @@ class CustomBinListButton(ListItemButton):
     def buttonCallback(instance):
 	MANAGER.current = "setting_update_bin_screen"
 
-
     def __init__(self, **kwargs):
         super(CustomBinListButton, self).__init__(**kwargs)
 
@@ -192,7 +191,7 @@ class CustomBinListButton(ListItemButton):
             self.color = [0, 0, 0, 1]
             self.background_color = [1, 1, 1, 1]
             self.size = (100, 100)
-            self.bind(on_press=buttonCallBack)
+            self.bind(on_press=self.buttonCallBack)
 
 
 class UpdateBinScreen(Screen):
@@ -203,33 +202,69 @@ class UpdateBinGrid(GridLayout):
     pass
 
 
-
-
 class UpdateBinCatergoryList(ListView):
     def __init__(self, **kwargs):
         super(UpdateBinCategoryList, self).__init__(**kwargs)
 
 	categories = list()
 
-	for entry in database_interface.getdata(database_interface.GUIDELINES.SHELF_TIME):
+	for entry in database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME):
 
             if entry['type'] not in categories:
-                categories.append(entry['type'])
+                categories.append(entry['type'].capitalize())
                 categories.append('a_buffer')
 
         list_item_args_converter = lambda row_index, info: {'text': info}
         self.adapter = ListAdapter(data=categories,
-                                   args_conerter=list_item_args_converter,
-                                   cls=CustomBinTypeButton)		
+                                   args_converter=list_item_args_converter,
+                                   cls=CustomBinCategoryButton)		
 
 
-class CustomBinTypeButton(ListItemButton):
-	pass
+class CustomBinCategoryButton(ListItemButton):
+    def buttonCallback(instance):
+	# clear UpdateBinTypeList
+	# add names
+	names = list()
+	type_list = MANAGER.get_screen(MANAGER.current).children[-1]
+        type_list.clear_widgets()
+        for entry in database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME, query={'type': instance.text.lower()}):
+            if entry['name'] not in names:
+                names.append(entry['name'].capitalize())
+                names.append("a_buffer")
+        list_item_args_converter = lambda row_index, info: {'text': info}
+        type_list.adapter = ListAdapter(data=names,
+                                        args_converter=list_item_args_converter,
+                                        cls=CustomBinNameButton)
+
+    def __init__(self, **kwargs):
+        super(CustomBinCategoryButton, self).__init__(**kwargs)
+
+        if self.text == "a_buffer":
+            self.background_normal = "Images/blank.png"
+            self.selected_color = [0, 0, 0, 1.]
+            self.deselected_color = [0, 0, 0, 1.]
+            self.color = [0, 0, 0, 1]
+            self.background_color = [0, 0, 0, 1]
+            self.size = (10, 10)
+
+        else:
+            self.background_normal = "Images/blank.png"
+            self.selected_color = [0, .5, .5, 1.]
+            self.deselected_color = [1, 1, 1, 1.]
+            self.color = [0, 0, 0, 1]
+            self.background_color = [1, 1, 1, 1]
+            self.size = (100, 100)
+            self.bind(on_press=self.buttonCallBack)
+
 
 
 class UpdateBinTypeList(ListView):
     def __init__(self, **kwargs):
 	super(UpdateBinTypeList(ListView)).__init__(**kwargs)
+
+
+class CustomBinNameButton(ListItemButton):
+	pass
 
 
 class MainApp(App):
@@ -245,7 +280,7 @@ class MainApp(App):
         sm.add_widget(SettingContactScreen(name="setting_contact"))
         sm.add_widget(SettingAreasScreen(name="setting_areas"))
         sm.add_widget(SettingGeneralScreen(name="setting_general"))
-        sm.add_widget(UpdateBinSCreen(name="setting_upate_bin_screen"))
+        sm.add_widget(UpdateBinScreen(name="setting_upate_bin_screen"))
         sm.current = "main"
         MANAGER = sm
 

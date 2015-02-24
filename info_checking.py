@@ -114,7 +114,7 @@ def _check_time_alerts(msgs):
         if data_since[e]['date']-data_since[f]['date'] >= time:
             info['msg'] = "The food was out of the fridge for longer than the recommended time, it may be bad."
             msgs.append(__create_time_message(info, al))
-        elif misses > 2:
+        elif misses < 6:
             info['msg'] = "The food has possibly spoiled"
             msgs.append(__create_time_message(info, al))
 

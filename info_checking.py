@@ -98,20 +98,23 @@ def _check_time_alerts(msgs):
                     e = i
             last_miss = False
 
-        i = guide[0]['pantry']['min']
+        i = guide[0]['pantry']['min'].split(",")
+        unit = "days"
+        i[0] = i[0].split(" ")
+        time = i[0][0]
         if len(i[0]) > 1:
             unit = i[0][1]
 
         if unit == "days":
-            time = datetime.datetime.now() - datetime.timedelta(days=int(time))
+            time = datetime.timedelta(days=int(time))
         if unit == "hours":
-            time = datetime.datetime.now() - datetime.timedelta(hours=int(time))
+            time = datetime.timedelta(hours=int(time))
 
         info = dict()
         info['bin'] = bin['bin']
         info['date'] = datetime.datetime.now()
 
-        if data_since[e]['date']-data_since[f]['date'] >= time:
+        if (data_since[e]['date']-data_since[f]['date']) >= time:
             info['msg'] = "The food was out of the fridge for longer than the recommended time, it may be bad."
             msgs.append(__create_time_message(info, al))
         elif misses < 6:

@@ -32,7 +32,7 @@ collections[ALERT] = "alerts"
 collections[CONTACT] = "contacts"
 collections[CONFIG.BINS] = "bins"
 collections[DETECTED_CONCERNS] = "concerns"
-collections[GUIDELINES.SHELF_TIME] = "guidelines_shelf_time"
+collections[GUIDELINES.SHELF_TIME] = "shelftime"
 collections[CLIENTS] = "clients"
 
 

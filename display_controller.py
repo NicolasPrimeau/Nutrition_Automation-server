@@ -85,10 +85,15 @@ def sort_bin(bins):
     return bins
 
 
-class MainScreen(Screen):
-    def alert_callback(self):
-        pass
+def update_and_view_food():
+    bin_grid = MANAGER.get_screen("food").children[0]
+    bin_grid.children[1].update()
+    MANAGER.current="food"
 
+
+class MainScreen(Screen):
+    def go_to_food(self):
+        update_and_view_food()
 
 
 class MainGrid(GridLayout):
@@ -119,12 +124,12 @@ class MessagesList(ListView):
             concerns = concerns[0]['info']
             for c in concerns:
                 for msg in c:
-                    msgs.append(re.sub("(.{40})", "\\1\n", msg['message']['plain'], 0, re.DOTALL))
+                    msgs.append(re.sub("(.{60})", "\\1\n", msg['message']['plain'], 0, re.DOTALL))
 
         list_item_args_converter = lambda row_index, text: {
             'text': text,
-            'height': 100,
-            'font_size': 30
+            'height': 50,
+            'font_size': 20
         }
 
         self.adapter = ListAdapter(data=msgs,
@@ -147,18 +152,20 @@ class DataGrid(GridLayout):
         bins = sort_bin(database_interface.get_data(database_interface.CONFIG.BINS))
 
         for bin in bins:
-            b = GridLayout(cols=1, rows=2)
+            b = GridLayout(cols=1, rows=3)
 
-            b.add_widget(Label(text=bin['name'].capitalize(), size_hint=(0.2, 0.2)))
+            b.add_widget(Label(text=bin['name'].capitalize(), font_size=30, size_hint_y=0.2))
 
             last_entry = database_interface.get_data(database_interface.FOOD, query={'bin': bin['bin']}, sort="date")
 
             if len(last_entry) == 0:
                 prog = 0
             else:
-                prog = last_entry[0]['quantity']
+                prog = last_entry[-1]['quantity']
 
-            pb = ProgressBar(max=100, value=prog, padding=20, size_hint=(0.8, 0.8))
+            b.add_widget(Label(text=("{0:.1f}".format(prog*5.0/100)+" Kg"), size_hint_y=0.2, font_size=20))
+
+            pb = ProgressBar(max=100, value=prog, padding=20, size_hint_y=0.6)
             b.add_widget(pb)
 
             self.add_widget(b)

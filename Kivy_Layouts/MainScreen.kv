@@ -27,7 +27,7 @@
                 background_normal: "Images/blank.png"
                 on_press:
                     root.manager.transition.direction = 'up'
-                    root.manager.current = 'food'
+                    root.go_to_food()
                 Image:
                     source:"Images/apple.png"
                     x: self.parent.center_x - self.width/2

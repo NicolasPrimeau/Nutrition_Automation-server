@@ -32,17 +32,17 @@ import datetime
 
 food = dict()
 food['bin'] = 1
-food['quantity'] = 10.0
+food['quantity'] = 90.0
 food['date'] = datetime.datetime.now()
 
 database_interface.store_data(database_interface.FOOD, food)
 
 food = dict()
-food['bin'] = 3
-food['quantity'] = 70.0
+food['bin'] = 2
+food['quantity'] = 90.0
 food['date'] = datetime.datetime.now()
 
-#database_interface.store_data(database_interface.FOOD, food)
+database_interface.store_data(database_interface.FOOD, food)
 
 config = dict()
 config['bin'] = 3

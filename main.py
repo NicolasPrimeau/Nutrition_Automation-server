@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # A sort of API to the core modules of the software. Additional modules should only use the following functions or else
 # there will be unexpected behaviour
 
@@ -9,8 +8,9 @@ import database_interface
 import signal
 import info_checking
 import data_input
-from kivy.base import runTouchApp
-import display_controller
+if "--no-gui" not in sys.argv:
+    from kivy.base import runTouchApp
+    import display_controller
 
 
 def main():
@@ -39,7 +39,8 @@ def main():
 
     # Start GUI
     # !! Not implemented !!
-    processes.append(Process(target=start_gui))
+    if "--no-gui" not in sys.argv:
+        processes.append(Process(target=start_gui))
 
     for p in processes:
         p.start()

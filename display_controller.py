@@ -159,21 +159,31 @@ class SettingAreasGrid(GridLayout):
     pass
 
 
+class SettingListGrid(GridLayout):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.add_widget(SettingAreasList())
+
+
 class SettingAreasList(ListView):
     def __init__(self, **kwargs):
-        super(SettingAreasList, self).__init__(**kwargs)
+        super().__init__(**kwargs)
 
         bins = database_interface.get_data(database_interface.CONFIG.BINS)
         areas = list()
 
         for bin in bins:
             areas.append('Bin ' + str(bin['bin']) + ': ' + bin['name'])
-            areas.append('a_buffer')
+            #areas.append('a_buffer')
 
-        list_item_args_converter = lambda row_index, info: {'text': info}
+        list_item_args_converter = lambda row_index, info: {
+            'text': info,
+            'size': (100, 100)
+        }
         self.adapter = ListAdapter(data=areas,
                                    args_converter=list_item_args_converter,
                                    cls=CustomBinListButton)
+
 
 
 def go_to_update(value):
@@ -194,12 +204,12 @@ class CustomBinListButton(ListItemButton):
             self.size = (10, 10)
 
         else:
-            self.background_normal = "Images/blank.png"
+            self.background_normal = "Images/Box.png"
             self.selected_color = [1, 1, 1, 1.]
             self.deselected_color = [1, 1, 1, 1.]
             self.color = [0, 0, 0, 1]
             self.background_color = [1, 1, 1, 1]
-            self.size = (100, 100)
+            #self.size = (100, 100)
             self.bind(on_press=go_to_update)
 
 
@@ -256,7 +266,7 @@ class UpdateBinDetailGrid(GridLayout):
             'selected_color': [0.2, 5, 0.5, 1.],
             'deselected_color': [1, 1, 1, 1.],
             'background_color': [1, 1, 1, 0.],
-            'background_normal': "Images/blank.png",
+            'background_normal': "Images/Box.png",
             'color': [0, 0, 0, 1.],
             'padding': (5, 5)
             }

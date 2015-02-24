@@ -61,9 +61,16 @@ class MessagesList(ListView):
             concerns = concerns[0]['info']
             for c in concerns:
                 for msg in c:
-                    msgs.append(re.sub("(.{64})", "\\1\n", msg['message']['plain'], 0, re.DOTALL))
+                    msgs.append(re.sub("(.{40})", "\\1\n", msg['message']['plain'], 0, re.DOTALL))
 
-        self.adapter = ListAdapter(data=msgs, cls=ListItemLabel)
+        list_item_args_converter = lambda row_index, info: {
+            'text': info,
+            'font_size': 22
+        }
+
+        self.adapter = ListAdapter(data=msgs,
+                                   args_converter=list_item_args_converter,
+                                   cls=ListItemLabel)
 
 
 class FoodScreen(Screen):
@@ -165,7 +172,7 @@ class SettingAreasList(ListView):
 
         list_item_args_converter = lambda row_index, info: {'text': info}
         self.adapter = ListAdapter(data=areas,
-                                   args_conerter=list_item_args_converter,
+                                   args_converter=list_item_args_converter,
                                    cls=CustomBinListButton)
 
 

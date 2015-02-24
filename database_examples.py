@@ -48,7 +48,6 @@ config = dict()
 config['bin'] = 3
 config['name'] = 'Steak'
 config['type'] = 'Meat'
-config['perishable'] = True
 
 #database_interface.store_data(database_interface.CONFIG.BINS, config)
 
@@ -56,7 +55,6 @@ config = dict()
 config['bin'] = 4
 config['name'] = "Bacon"
 config['type'] = "Meat"
-config['perishable'] = True
 
 #database_interface.store_data(database_interface.CONFIG.BINS, config)
 

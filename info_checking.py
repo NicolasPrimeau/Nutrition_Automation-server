@@ -1,10 +1,7 @@
 # Checks the consistency of database software
 
 import database_interface
-import alert
 import datetime
-import custom_functions
-import guidelines
 
 
 def check_data():
@@ -82,15 +79,44 @@ def _check_time_alerts(msgs):
 
         data_since = __sort_by_date(data_since)
 
-        flag = False
+        misses = 0
+        last_miss = False
+        first = 0
+        f = e = 0
 
-        for entry in data_since:
-            if entry['quantity'] < minimum:
-                flag = True
-                break
+        for i in range(len(data_since)):
+            if data_since[i]['quantity'] < minimum:
+                if not last_miss:
+                    last_miss = True
+                    first = i
+                    misses += 1
+                else:
+                    misses += 1
+            elif last_miss:
+                if i-first > e-f:
+                    f = first
+                    e = i
+            last_miss = False
 
-        if not flag or True:
-            msgs.append(__create_time_message())
+        i = guide[0]['pantry']['min']
+        if len(i[0]) > 1:
+            unit = i[0][1]
+
+        if unit == "days":
+            time = datetime.datetime.now() - datetime.timedelta(days=int(time))
+        if unit == "hours":
+            time = datetime.datetime.now() - datetime.timedelta(hours=int(time))
+
+        info = dict()
+        info['bin'] = bin['bin']
+        info['date'] = datetime.datetime.now()
+
+        if data_since[e]['date']-data_since[f]['date'] >= time:
+            info['msg'] = "The food was out of the fridge for longer than the recommended time, it may be bad."
+            msgs.append(__create_time_message(info, al))
+        elif misses > 2:
+            info['msg'] = "The food has possibly spoiled"
+            msgs.append(__create_time_message(info, al))
 
     return alerts
 
@@ -229,7 +255,7 @@ def __create_quantity_message(info, ale):
         msg['address'].append(cont['email'])
         msg['phone_num'].append(cont['phone'])
 
-    msg['subject'] = "Low Stock - Bin " + str(info['bin']);
+    msg['subject'] = "Low Stock - Bin " + str(info['bin'])
 
     msg['message'] = {}
 
@@ -249,6 +275,36 @@ def __create_quantity_message(info, ale):
     return msg
 
 
-def __create_time_message(info, alert):
-    raise NotImplementedError
+def __create_time_message(info, ale):
+    names = []
+    for cont in ale['contact']:
+        names.append(cont['name'])
+    query = dict()
+    query['name'] = {}
+    query['name']['$in'] = names
+
+    contacts = database_interface.get_data(database_interface.CONTACT, query)
+
+    msg = dict()
+    msg['address'] = []
+    msg['phone_num'] = []
+    for cont in contacts:
+        msg['address'].append(cont['email'])
+        msg['phone_num'].append(cont['phone'])
+
+    msg['subject'] = "Time Alert - Bin " + str(info['bin'])
+
+    msg['message'] = {}
+
+    msg['message']['plain'] = info['date'].strftime("%Y-%m-%d") + "\n"
+    msg['message']['html'] = "<p>" + msg['message']['plain'] + "</p><br>"
+
+    msg['message']['plain'] = "Stock for Bin " + str(info['bin']) + ":\n "
+    msg['message']['html'] = "<p>" + "Stock for Bin " + str(info['bin']) + ":\n "
+
+
+    msg['message']['plain'] += info['msg']
+    msg['message']['html'] += info['msg']+"</p><br>"
+
+    return msg
 

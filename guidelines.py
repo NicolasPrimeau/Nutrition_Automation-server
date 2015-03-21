@@ -28,7 +28,7 @@ TIME_LENGTHS.append(temp)
 temp = dict()
 temp['name'] = "cantaloupe"
 temp['type'] = "fruit"
-temp['fruit'] = {'min': "7", 'max': "7"}
+temp['fridge'] = {'min': "7", 'max': "7"}
 temp['pantry'] = {'min': "21", 'max': "28"}
 TIME_LENGTHS.append(temp)
 
@@ -36,7 +36,7 @@ TIME_LENGTHS.append(temp)
 temp = dict()
 temp['name'] = "grapes"
 temp['type'] = "fruit"
-temp['fruit'] = {'min': "7", 'max': "10"}
+temp['fridge'] = {'min': "7", 'max': "10"}
 temp['pantry'] = {'min': "3", 'max': "5"}
 TIME_LENGTHS.append(temp)
 

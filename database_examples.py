@@ -9,7 +9,7 @@ contact['phone'] = "6139157187"
 contact['email'] = "nicolas.primeau@gmail.com"
 
 # store data
-# database_interface.store_data(database_interface.CONTACT,contact)
+#database_interface.store_data(database_interface.CONTACT,contact)
 
 alarm = dict()
 alarm['description'] = "General catch all alarm for testing"
@@ -32,27 +32,27 @@ import datetime
 
 food = dict()
 food['bin'] = 1
-food['quantity'] = 90.0
+food['quantity'] = 0.0
 food['date'] = datetime.datetime.now()
 
 database_interface.store_data(database_interface.FOOD, food)
 
 food = dict()
 food['bin'] = 2
-food['quantity'] = 90.0
+food['quantity'] = 0.0
 food['date'] = datetime.datetime.now()
 
 database_interface.store_data(database_interface.FOOD, food)
 
 config = dict()
-config['bin'] = 3
+config['bin'] = 1
 config['name'] = 'Steak'
 config['type'] = 'Meat'
 
 #database_interface.store_data(database_interface.CONFIG.BINS, config)
 
 config = dict()
-config['bin'] = 4
+config['bin'] = 2
 config['name'] = "Bacon"
 config['type'] = "Meat"
 

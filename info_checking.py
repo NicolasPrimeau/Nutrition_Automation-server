@@ -10,12 +10,12 @@ def check_data():
     alerts = database_interface.get_data(database_interface.ALERT)
     messages = list()
 
-    _check_time_alerts(messages)
+    for msg in _check_time_alerts():
+        messages.append(msg)
 
     for a in alerts:
         if a['type'] == 'quantity':
-            x = _check_quantity_alert(a)
-            if len(x) != 0:
+            for x in _check_quantity_alert(a):
                 messages.append(x)
 
     # distille the messages
@@ -27,27 +27,29 @@ def check_data():
                                   {'info': messages, 'date': datetime.datetime.now()}, create=True)
 
     # Alert_set is a set of flags raised by one configured alert
-    for alert_set in messages:
-        # We process every alert in the set seperately
-        for a in alert_set:
-            #For now !! Remove later
-            print("\n\nAddress: " + ", ".join(a['address']))
-            print("Subject: " + a['subject'])
-            print("Message: " + a['message']['plain'])
+    database_interface.__remove(database_interface.PLAIN_TEXT_MESSAGES, {})
+    for a in messages:
+        #For now !! Remove later
+        print("\n\nAddress: " + ", ".join(a['address']))
+        print("Subject: " + a['subject'])
+        print("Message: " + a['message']['plain'])
+        database_interface.store_data(database_interface.PLAIN_TEXT_MESSAGES,
+                                      {'date': datetime.datetime.now(),
+                                       'message': a['message']['plain']})
+        #alert.send_email(a['address'], a['subject'], a['message'])
+        #alert.send_text(a['phone_num'], a['message'])
 
-            #alert.send_email(a['address'], a['subject'], a['message'])
-            #alert.send_text(a['phone_num'], a['message'])
 
+def _check_time_alerts():
 
-def _check_time_alerts(msgs):
-
-    alerts = dict()
+    alerts = list()
 
     for bin in database_interface.get_data(database_interface.CONFIG.BINS, {'bin': {'$gt': 0}}):
-        guide = database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME, {'name': bin['name'].lower()})
-        if len(guide) < 0:
-            continue
-        i = guide[0]['fridge']['min'].split(",")
+        guide = database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME, {'name': bin['name'].lower()}, single=True)
+        if guide == None:
+            return
+
+        i = guide['fridge']['min'].split(",")
 
         unit = "days"
         i[0] = i[0].split(" ")
@@ -71,11 +73,11 @@ def _check_time_alerts(msgs):
         query['target_bins'] = bin['bin']
         query['type'] = 'quantity'
 
-        al = database_interface.get_data(database_interface.ALERT, query)
+        al = database_interface.get_data(database_interface.ALERT, query)[0]
         if len(al) < 0:
             minimum = 5
         else:
-            minimum = al[0]['flag']['min']
+            minimum = al['flag']['min']
 
         data_since = __sort_by_date(data_since)
 
@@ -98,7 +100,7 @@ def _check_time_alerts(msgs):
                     e = i
             last_miss = False
 
-        i = guide[0]['pantry']['min'].split(",")
+        i = guide['pantry']['min'].split(",")
         unit = "days"
         i[0] = i[0].split(" ")
         time = i[0][0]
@@ -114,12 +116,15 @@ def _check_time_alerts(msgs):
         info['bin'] = bin['bin']
         info['date'] = datetime.datetime.now()
 
+
         if (data_since[e]['date']-data_since[f]['date']) >= time:
+            print("\nTime delta\n")
             info['msg'] = "The food was out of the fridge for longer than the recommended time, it may be bad."
-            msgs.append(__create_time_message(info, al))
-        elif misses < 6:
+            alerts.append(__create_time_message(info, al))
+        elif misses < 3:
+            print("\nMisses:" + str(misses) + "\n")
             info['msg'] = "The food has possibly spoiled"
-            msgs.append(__create_time_message(info, al))
+            alerts.append(__create_time_message(info, al))
 
     return alerts
 
@@ -211,11 +216,10 @@ def consistency_check():
         stats_data[item['bin']]['avg'] += item['quantity']
         stats_data[item['bin']]['cnt'] += 1
 
-        # calc average
 
-
+    # calc average
     for key, stats in stats_data:
-        stats_data[key]['avg'] /= stats_data[item['bin']]['cnt']
+        stats_data[key]['avg'] /= stats_data[key]['cnt']
 
     # calc raw standard variance, not divided
 
@@ -238,7 +242,7 @@ def consistency_check():
 
     for key, stat in stats_data:
         if stat['concern_cnt'] > 6:
-            print("Bin " + str(item['bin']) + " has highly inconsistent data")
+            print("Bin " + str(key) + " has highly inconsistent data")
 
 
 def __create_quantity_message(info, ale):
@@ -289,8 +293,8 @@ def __create_time_message(info, ale):
     contacts = database_interface.get_data(database_interface.CONTACT, query)
 
     msg = dict()
-    msg['address'] = []
-    msg['phone_num'] = []
+    msg['address'] = list()
+    msg['phone_num'] = list()
     for cont in contacts:
         msg['address'].append(cont['email'])
         msg['phone_num'].append(cont['phone'])

@@ -19,6 +19,7 @@ ALERT = "alert"
 CONTACT = "contact"
 DETECTED_CONCERNS = "concerns"
 CLIENTS = "clients"
+PLAIN_TEXT_MESSAGES = 'plain_concerns'
 
 
 __DATABASE = "Nutrition_Automation"
@@ -34,6 +35,7 @@ collections[CONFIG.BINS] = "bins"
 collections[DETECTED_CONCERNS] = "concerns"
 collections[GUIDELINES.SHELF_TIME] = "shelftime"
 collections[CLIENTS] = "clients"
+collections[PLAIN_TEXT_MESSAGES] = "plain_concerns"
 
 
 def __setup():

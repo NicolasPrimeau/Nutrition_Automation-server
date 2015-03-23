@@ -13,17 +13,18 @@ from kivy.config import Config
 MANAGER = None
 
 # show bin names
+from Display_Controllers.SettingAreasScreen import SettingAreasList
 from Display_Controllers.AlertScreen import AlertScreen
 from Display_Controllers.FoodScreen import FoodScreen
 from Display_Controllers.MainScreen import MainScreen
 from Display_Controllers.SettingAlertsScreen import SettingAlertScreen
 from Display_Controllers.SettingAreasScreen import SettingAreasScreen
-from Display_Controllers.SettingAreasScreen import SettingAreasList
 from Display_Controllers.SettingContactScreen import SettingContactScreen
 from Display_Controllers.SettingGeneralScreen import SettingGeneralScreen
 from Display_Controllers.SettingScreen import SettingsScreen
 from Display_Controllers.UpdateBinScreen import UpdateBinScreen
-
+from Display_Controllers.UpdateContact import UpdateContactScreen
+from Display_Controllers.NewContact import NewContactScreen
 
 def show_bin_names(ad):
     if len(ad.selection) == 0:
@@ -74,6 +75,7 @@ def sort_bin(bins):
     ar = [dict() for _ in range(len(bins))]
 
     for bin in bins:
+        print(bin)
         ar[bin['bin']-1] = bin
     bins = ar
     return bins
@@ -86,7 +88,27 @@ def update_and_view_food():
 
 
 def go_to_update(value):
+    MANAGER.transition.direction = 'left'
     MANAGER.current = "setting_update_bin_screen"
+
+
+def go_to_contact(value):
+    global MANAGER
+    contact = MANAGER.get_screen("setting_contact").children[0].children[0].children[0]
+
+    contact = contact.adapter
+    if len(contact.selection) > 0:
+        contact = contact.selection[0].text
+
+        update_cont = MANAGER.get_screen("setting_update_contact_screen").children[0].children[0]
+        contact = database_interface.get_data(database_interface.CONTACT, {'name': contact})
+        contact = contact[0]
+        update_cont.children[2].text = contact['name']
+        update_cont.children[1].text = contact['email']
+        update_cont.children[0].text = contact['phone']
+
+    MANAGER.transition.direction = 'left'
+    MANAGER.current = "setting_update_contact_screen"
 
 
 class DataItem(SelectableDataItem):
@@ -96,11 +118,13 @@ class DataItem(SelectableDataItem):
         super().__init__(**kwargs)
         self.text = text
 
+
 class MainApp(App):
     def build(self):
         Config.set('graphics', 'fullscreen', '1')
         global MANAGER
         sm = ScreenManager()
+
         sm.add_widget(MainScreen(name="main"))
         sm.add_widget(AlertScreen(name="alert"))
         sm.add_widget(FoodScreen(name="food"))
@@ -110,6 +134,8 @@ class MainApp(App):
         sm.add_widget(SettingAreasScreen(name="setting_areas"))
         sm.add_widget(SettingGeneralScreen(name="setting_general"))
         sm.add_widget(UpdateBinScreen(name="setting_update_bin_screen"))
+        sm.add_widget(UpdateContactScreen(name="setting_update_contact_screen"))
+        sm.add_widget(NewContactScreen(name="new_contact_screen"))
         sm.current = "main"
         MANAGER = sm
 

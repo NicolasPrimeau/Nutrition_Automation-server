@@ -2,6 +2,7 @@
 
 <SettingContactScreen>:
     SettingContactGrid:
+        size: root.size
         rows:1
         cols:2
         spacing:10
@@ -15,10 +16,20 @@
             text:"Back"
             color: 0,0,0,1
             font_size: 30
-            size_hint: 0.25, 0.25
-
-        SettingContactNittyGrid:
-            rows:4
+            size_hint: 0.20, 0.20
+        SettingContactSubGrid:
+            rows:2
             cols:1
-            padding:10
-            spacing:10
+            Button:
+                text:'New Contact'
+                on_press:
+                    root.manager.transition.direction = 'left'
+                    root.manager.current = 'new_contact_screen'
+                size_hint: 0.20, 0.20
+                color: 0,0,0,1
+                background_normal: "Images/blank.png"
+                padding:10,10
+            SettingContactList:
+                rows:1
+                cols:1
+                size_hint: 0.8, 0.8

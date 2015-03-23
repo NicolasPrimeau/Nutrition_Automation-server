@@ -3,11 +3,32 @@
 NR = "Not Recommended"
 INFI = "inf"
 
-TYPES = ['fruit', 'vegetable', 'animal product', 'meat', 'baked good', 'condiment', 'leftover']
+TYPES = ['fruit', 'vegetable', 'animal product', 'meat', 'baked good', 'condiment',
+         'leftover', 'liquid']
 LOCATIONS = ['fridge', 'pantry']
 
 TIME_LENGTHS = list()
 
+temp = dict()
+temp['name'] = 'milk'
+temp['type'] = 'liquid'
+temp['fridge'] = {'min': "5", 'max': "7"}
+temp['pantry'] = {'min': "1 hours", 'max': "1 hours"}
+TIME_LENGTHS.append(temp)
+
+temp = dict()
+temp['name'] = 'orange juice'
+temp['type'] = 'liquid'
+temp['fridge'] = {'min': "5", 'max': "7"}
+temp['pantry'] = {'min': "1 hours", 'max': "1 hours"}
+TIME_LENGTHS.append(temp)
+
+temp = dict()
+temp['name'] = 'apple cider'
+temp['type'] = 'liquid'
+temp['fridge'] = {'min': "5", 'max': "7"}
+temp['pantry'] = {'min': "1 hours", 'max': "1 hours"}
+TIME_LENGTHS.append(temp)
 
 temp = dict()
 temp['name'] = "apple"

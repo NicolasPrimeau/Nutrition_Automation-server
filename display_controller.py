@@ -32,7 +32,7 @@ def show_bin_names(ad):
 
     global MANAGER
 
-    type_list = MANAGER.get_screen("setting_update_bin_screen").children[-1]
+    type_list = MANAGER.get_screen("setting_update_bin").children[-1]
 
     type_list = type_list.children[0]
     type_list.remove_widget(type_list.children[0])
@@ -89,7 +89,7 @@ def update_and_view_food():
 
 def go_to_update(value):
     MANAGER.transition.direction = 'left'
-    MANAGER.current = "setting_update_bin_screen"
+    MANAGER.current = "setting_update_bin"
 
 
 def go_to_contact(value):
@@ -100,15 +100,15 @@ def go_to_contact(value):
     if len(contact.selection) > 0:
         contact = contact.selection[0].text
 
-        update_cont = MANAGER.get_screen("setting_update_contact_screen").children[0].children[0]
+        update_cont = MANAGER.get_screen("setting_update_contact").children[0].children[0]
         contact = database_interface.get_data(database_interface.CONTACT, {'name': contact})
         contact = contact[0]
-        update_cont.children[2].text = contact['name']
-        update_cont.children[1].text = contact['email']
-        update_cont.children[0].text = contact['phone']
+        update_cont.children[-1].text = contact['name']
+        update_cont.children[-2].text = contact['email']
+        update_cont.children[-3].text = contact['phone']
 
     MANAGER.transition.direction = 'left'
-    MANAGER.current = "setting_update_contact_screen"
+    MANAGER.current = "setting_update_contact"
 
 
 class DataItem(SelectableDataItem):
@@ -133,9 +133,9 @@ class MainApp(App):
         sm.add_widget(SettingContactScreen(name="setting_contact"))
         sm.add_widget(SettingAreasScreen(name="setting_areas"))
         sm.add_widget(SettingGeneralScreen(name="setting_general"))
-        sm.add_widget(UpdateBinScreen(name="setting_update_bin_screen"))
-        sm.add_widget(UpdateContactScreen(name="setting_update_contact_screen"))
-        sm.add_widget(NewContactScreen(name="new_contact_screen"))
+        sm.add_widget(UpdateBinScreen(name="setting_update_bin"))
+        sm.add_widget(UpdateContactScreen(name="setting_update_contact"))
+        sm.add_widget(NewContactScreen(name="new_contact"))
         sm.current = "main"
         MANAGER = sm
 

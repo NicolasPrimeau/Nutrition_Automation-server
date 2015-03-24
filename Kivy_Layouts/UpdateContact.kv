@@ -9,7 +9,7 @@
         padding:10
 
         BackButtonGrid:
-            rows:2
+            rows:3
             cols:1
             size_hint_x:0.25
             spacing:10
@@ -21,7 +21,7 @@
                 text:"Back"
                 color: 0,0,0,1
                 font_size: 30
-                size_hint_y: 0.5
+                size_hint_y: 0.33
 
             Button:
                 background_normal: "Images/blank.png"
@@ -29,12 +29,25 @@
                 color: 0,0,0,1
                 font_size: 30
                 size_hint: 0.20, 0.20
-                size_hint_y: 0.5
-                on_press: root.config_bin()
+                size_hint_y: 0.33
+                on_press: root.add_contact()
+
+            Button:
+                background_normal: "Images/blank.png"
+                text:"Delete"
+                color: 0,0,0,1
+                font_size: 30
+                size_hint: 0.20, 0.20
+                size_hint_y: 0.33
+                on_press: root.delete_contact()
 
 
         UpdateContactDetailGrid:
-            rows:6
+            rows:5
             cols:1
             spacing:10
+            SpaceGrid:
+                rows:1
+            SpaceGrid:
+                rows:1
 

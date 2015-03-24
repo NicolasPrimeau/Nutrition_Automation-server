@@ -21,18 +21,17 @@ class SettingContactGrid(GridLayout):
 
 
 class SettingContactSubGrid(GridLayout):
-    pass
+    def update_contacts(self):
+        self.clear_widgets(children=0)
+        self.add_widget(SettingContactList())
 
-
-class SettingListGrid(GridLayout):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.add_widget(SettingContactList())
 
 
 class SettingContactList(ListView):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+
+    def update_contacts(self):
         names = controller.database_interface.get_data(database_interface.CONTACT)
         li = list()
 
@@ -54,4 +53,8 @@ class SettingContactList(ListView):
                                    propagate_selection_to_data=True,
                                    cls=ListItemButton)
         self.adapter.bind(on_selection_change=controller.go_to_contact)
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.update_contacts()
 

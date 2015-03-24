@@ -132,6 +132,9 @@ def _cleanup():
 
 # query is a dictionary with the elements to choose from
 
+def delete_contact(query):
+    __remove(CONTACT, query)
+
 def __remove(ty, query):
     if ty in collections:
         client = MongoClient()

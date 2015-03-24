@@ -14,6 +14,10 @@ class GUIDELINES(Enum):
     SHELF_TIME = "shelf_time"
 
 
+class PURGED(Enum):
+    BINS = "purged_bins"
+    DATA = "purged_data"
+
 FOOD = "food"
 ALERT = "alert"
 CONTACT = "contact"
@@ -36,6 +40,8 @@ collections[DETECTED_CONCERNS] = "concerns"
 collections[GUIDELINES.SHELF_TIME] = "shelftime"
 collections[CLIENTS] = "clients"
 collections[PLAIN_TEXT_MESSAGES] = "plain_concerns"
+collections[PURGED.BINS] = "purged_bins"
+collections[PURGED.DATA] = "purged_data"
 
 
 def __setup():
@@ -118,16 +124,25 @@ def count(ty, query=dict()):
 
 
 def configure_bin(new_bin):
+    old_bin = get_data(CONFIG.BINS, {'bin': new_bin['bin']},single=True)
+    old_bin['date'] = datetime.datetime.now()
+
+    store_data(PURGED.BINS, old_bin)
+
     update(CONFIG.BINS, {'bin': new_bin['bin']}, new_bin)
+
+    for item in get_data(FOOD):
+        store_data(PURGED.DATA, item)
+
     __remove(FOOD, {'bin': new_bin['bin']})
 
 
 def _cleanup():
     day = datetime.datetime.now() - datetime.timedelta(days=30)
-    query = dict()
-    query['date'] = {'$lte': day}
 
-    __remove(FOOD, query)
+    __remove(FOOD, {'date': {'$lte': day}})
+    __remove(PURGED.DATA, {'date': {'$lte': day}})
+    __remove(PURGED.BINS, {'date': {'$lte': day}})
 
 
 # query is a dictionary with the elements to choose from

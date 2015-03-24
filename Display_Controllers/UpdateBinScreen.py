@@ -9,7 +9,7 @@ import datetime
 import database_interface
 import display_controller as controller
 
-Builder.load_file('../Kivy_Layouts/UpdateBin.kv')
+Builder.load_file('Kivy_Layouts/UpdateBin.kv')
 
 class UpdateBinScreen(Screen):
     def config_bin(self):

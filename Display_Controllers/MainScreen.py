@@ -7,7 +7,7 @@ from kivy.uix.screenmanager import Screen
 import display_controller as controller
 
 
-Builder.load_file('../Kivy_Layouts/MainScreen.kv')
+Builder.load_file('Kivy_Layouts/MainScreen.kv')
 
 
 class MainScreen(Screen):

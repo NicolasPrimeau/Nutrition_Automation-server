@@ -9,7 +9,7 @@ from kivy.adapters.listadapter import ListAdapter
 import database_interface
 import re
 
-Builder.load_file('../Kivy_Layouts/AlertScreen.kv')
+Builder.load_file('Kivy_Layouts/AlertScreen.kv')
 
 
 class AlertScreen(Screen):

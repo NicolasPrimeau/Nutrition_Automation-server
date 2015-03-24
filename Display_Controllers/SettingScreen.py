@@ -4,7 +4,7 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.base import Builder
 from kivy.uix.screenmanager import Screen
 
-Builder.load_file('../Kivy_Layouts/SettingScreen.kv')
+Builder.load_file('Kivy_Layouts/SettingScreen.kv')
 
 
 class SettingsScreen(Screen):

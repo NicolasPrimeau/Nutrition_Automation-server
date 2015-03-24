@@ -9,7 +9,7 @@ from kivy.adapters.listadapter import ListAdapter
 import display_controller as controller
 import database_interface
 
-Builder.load_file('../Kivy_Layouts/SettingContacts.kv')
+Builder.load_file('Kivy_Layouts/SettingContacts.kv')
 
 
 class SettingContactScreen(Screen):

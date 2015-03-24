@@ -10,7 +10,7 @@ import database_interface
 import display_controller as controller
 from kivy.uix.textinput import TextInput
 
-Builder.load_file('../Kivy_Layouts/new_contact.kv')
+Builder.load_file('Kivy_Layouts/new_contact.kv')
 
 
 class NewContactScreen(Screen):
@@ -58,3 +58,6 @@ class ContactTextInput(TextInput):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.font_size = 30
+
+class SpaceGrid(GridLayout):
+    pass

@@ -7,7 +7,7 @@ from kivy.uix.textinput import TextInput
 import database_interface
 import display_controller as controller
 
-Builder.load_file('../Kivy_Layouts/UpdateContact.kv')
+Builder.load_file('Kivy_Layouts/UpdateContact.kv')
 
 class UpdateContactScreen(Screen):
     

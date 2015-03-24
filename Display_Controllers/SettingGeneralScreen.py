@@ -6,7 +6,7 @@ from kivy.base import Builder
 from kivy.uix.screenmanager import Screen
 
 
-Builder.load_file('../Kivy_Layouts/SettingGeneral.kv')
+Builder.load_file('Kivy_Layouts/SettingGeneral.kv')
 
 
 class SettingGeneralScreen(Screen):

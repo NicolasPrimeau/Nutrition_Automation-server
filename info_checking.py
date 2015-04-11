@@ -246,12 +246,6 @@ def consistency_check():
 
 
 def __create_quantity_message(info, ale):
-    names = []
-    for cont in ale['contact']:
-        names.append(cont['name'])
-    query = dict()
-    query['name'] = {}
-    query['name']['$in'] = names
 
     contacts = database_interface.get_data(database_interface.CONTACT, query)
 
@@ -283,14 +277,8 @@ def __create_quantity_message(info, ale):
 
 
 def __create_time_message(info, ale):
-    names = []
-    for cont in ale['contact']:
-        names.append(cont['name'])
-    query = dict()
-    query['name'] = {}
-    query['name']['$in'] = names
 
-    contacts = database_interface.get_data(database_interface.CONTACT, query)
+    contacts = database_interface.get_data(database_interface.CONTACT)
 
     msg = dict()
     msg['address'] = list()

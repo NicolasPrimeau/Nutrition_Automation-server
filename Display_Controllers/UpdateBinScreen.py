@@ -11,6 +11,7 @@ import display_controller as controller
 
 Builder.load_file('Kivy_Layouts/UpdateBin.kv')
 
+
 class UpdateBinScreen(Screen):
     def config_bin(self):
 
@@ -29,12 +30,13 @@ class UpdateBinScreen(Screen):
         new_bin['name'] = name_list.adapter.selection[0].text.lower()
         new_bin['type'] = type_list.adapter.selection[0].text.lower()
         new_bin['date'] = datetime.datetime.now()
+        new_bin['display_type'] = 0
 
         database_interface.configure_bin(new_bin)
 
         controller.update_all_bins()
+        controller.MANAGER.transition.direction = 'right'
         controller.MANAGER.current = "main"
-
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

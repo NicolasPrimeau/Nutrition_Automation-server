@@ -7,18 +7,32 @@
         spacing:10
         padding:10
 
-        Button:
-            background_normal: "Images/blank.png"
-            on_press:
-                root.manager.transition.direction = 'right'
-                root.manager.current = 'settings'
-            text:"Back"
-            color: 0,0,0,1
-            font_size: 30
-            size_hint: 0.25, 0.25
-
-        SettingGeneralNittyGrid:
-            rows:4
+        BackButtonGrid:
+            rows:2
             cols:1
-            padding:10
+            size_hint_x:0.25
             spacing:10
+            Button:
+                background_normal: "Images/blank.png"
+                on_press:
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = 'settings'
+                text:"Back"
+                color: 0,0,0,1
+                font_size: 30
+                size_hint_y: 0.5
+            Button:
+                background_normal: "Images/blank.png"
+                text:"Apply"
+                color: 0,0,0,1
+                font_size: 30
+                size_hint: 0.20, 0.20
+                size_hint_y: 0.5
+                on_press: root.set_general_settings()
+
+
+        SettingPanel:
+            rows: 6
+            cols: 1
+
+

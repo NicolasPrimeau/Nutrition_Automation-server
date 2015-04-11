@@ -1,0 +1,26 @@
+#:kivy 1.8.0
+
+<ReportScreen>:
+    ReportGrid:
+        rows:2
+        cols:1
+        spacing:10
+        padding:10
+        Button:
+            background_normal: "Images/blank.png"
+            on_press:
+                root.manager.transition.direction = 'up'
+                root.manager.current = 'main'
+            text:"Back"
+            color: 0,0,0,1
+            font_size: 30
+            size_hint: 0.25, 0.25
+        ReportLowerGrid:
+            rows:1
+            cols:1
+            spacing:10
+
+
+
+
+

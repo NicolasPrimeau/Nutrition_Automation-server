@@ -25,6 +25,9 @@ from Display_Controllers.SettingScreen import SettingsScreen
 from Display_Controllers.UpdateBinScreen import UpdateBinScreen
 from Display_Controllers.UpdateContact import UpdateContactScreen
 from Display_Controllers.NewContact import NewContactScreen
+from Display_Controllers.UpdateAlert import UpdateAlertScreen
+from Display_Controllers.NewAlert import NewAlertScreen
+from Display_Controllers.ReportScreen import ReportScreen
 
 def show_bin_names(ad):
     if len(ad.selection) == 0:
@@ -64,6 +67,8 @@ def show_bin_names(ad):
 def update_all_bins():
     bin_grid = MANAGER.get_screen("setting_areas").children[0].children[0]
 
+    MANAGER.get_screen("setting_general").children[0].children[0].update()
+
     bin_grid.clear_widgets()
     bin_grid.add_widget(SettingAreasList())
 
@@ -75,7 +80,6 @@ def sort_bin(bins):
     ar = [dict() for _ in range(len(bins))]
 
     for bin in bins:
-        print(bin)
         ar[bin['bin']-1] = bin
     bins = ar
     return bins
@@ -111,6 +115,12 @@ def go_to_contact(value):
     MANAGER.current = "setting_update_contact"
 
 
+def go_to_alert(value):
+    global MANAGER
+    MANAGER.get_screen("setting_update_alert").children[0].children[0].update()
+    MANAGER.transition.direction = 'left'
+    MANAGER.current = "setting_update_alert"
+
 class DataItem(SelectableDataItem):
     text = ""
 
@@ -124,7 +134,6 @@ class MainApp(App):
         Config.set('graphics', 'fullscreen', '1')
         global MANAGER
         sm = ScreenManager()
-
         sm.add_widget(MainScreen(name="main"))
         sm.add_widget(AlertScreen(name="alert"))
         sm.add_widget(FoodScreen(name="food"))
@@ -136,6 +145,9 @@ class MainApp(App):
         sm.add_widget(UpdateBinScreen(name="setting_update_bin"))
         sm.add_widget(UpdateContactScreen(name="setting_update_contact"))
         sm.add_widget(NewContactScreen(name="new_contact"))
+        sm.add_widget(UpdateAlertScreen(name="setting_update_alert"))
+        sm.add_widget(NewAlertScreen(name="new_alert"))
+        sm.add_widget(ReportScreen(name="report"))
         sm.current = "main"
         MANAGER = sm
 

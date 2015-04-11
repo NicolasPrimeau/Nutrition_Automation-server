@@ -14,6 +14,9 @@ class MainScreen(Screen):
     def go_to_food(self):
         controller.update_and_view_food()
 
+    def go_to_report(self):
+        controller.MANAGER.transition.direction = 'down'
+        controller.MANAGER.current = "report"
 
 class MainGrid(GridLayout):
     pass

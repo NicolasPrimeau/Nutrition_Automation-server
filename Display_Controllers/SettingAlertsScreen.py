@@ -22,7 +22,7 @@ class SettingAlertGrid(GridLayout):
 
 
 class SettingAlertSubGrid(GridLayout):
-    def update_contacts(self):
+    def update_alerts(self):
         self.clear_widgets(children=0)
         self.add_widget(SettingAlertList())
 
@@ -31,13 +31,12 @@ class SettingAlertSubGrid(GridLayout):
 
 
 class SettingAlertList(ListView):
-
     def update_alerts(self):
         names = controller.database_interface.get_data(database_interface.ALERT)
         li = list()
 
         for name in names:
-            li.append(controller.DataItem(str(name['name'])))
+            li.append(controller.DataItem(str(name['description'])))
 
         list_item_args_converter = lambda row_index, obj: {
             'text': obj.text,
@@ -53,9 +52,9 @@ class SettingAlertList(ListView):
                                    args_converter=list_item_args_converter,
                                    propagate_selection_to_data=True,
                                    cls=ListItemButton)
-        self.adapter.bind(on_selection_change=controller.go_to_contact)
+        self.adapter.bind(on_selection_change=controller.go_to_alert)
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        #self.update_alerts()
+        self.update_alerts()
 

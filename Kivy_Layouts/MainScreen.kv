@@ -37,7 +37,11 @@
                 background_normal: "Images/blank.png"
                 on_press:
                     root.manager.transition.direction = 'down'
-                    root.manager.current = 'settings'
+                    root.go_to_report()
+                Image:
+                    source:"Images/report.png"
+                    x: self.parent.center_x - self.width/2
+                    y: self.parent.center_y - self.height/2
 
         Button:
             size_hint: 0.25, 0.25

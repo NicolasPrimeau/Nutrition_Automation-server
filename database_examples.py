@@ -46,19 +46,17 @@ food['date'] = datetime.datetime.now()
 
 config = dict()
 config['bin'] = 1
-config['name'] = 'Steak'
-config['type'] = 'Meat'
-config['settings'] = dict()
-config['settings']['display_type'] = 0
+config['name'] = 'steak'
+config['type'] = 'meat'
+config['display_type'] = 0
 
 database_interface.store_data(database_interface.CONFIG.BINS, config)
 
 config = dict()
 config['bin'] = 2
-config['name'] = "Bacon"
-config['type'] = "Meat"
-config['settings'] = dict()
-config['settings']['display_type'] = 0
+config['name'] = "bacon"
+config['type'] = "meat"
+config['display_type'] = 0
 
 database_interface.store_data(database_interface.CONFIG.BINS, config)
 

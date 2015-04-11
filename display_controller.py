@@ -66,6 +66,8 @@ def show_bin_names(ad):
 def update_all_bins():
     bin_grid = MANAGER.get_screen("setting_areas").children[0].children[0]
 
+    MANAGER.get_screen("setting_general").children[0].children[0].update()
+
     bin_grid.clear_widgets()
     bin_grid.add_widget(SettingAreasList())
 
@@ -77,7 +79,6 @@ def sort_bin(bins):
     ar = [dict() for _ in range(len(bins))]
 
     for bin in bins:
-        print(bin)
         ar[bin['bin']-1] = bin
     bins = ar
     return bins

@@ -45,39 +45,54 @@ def generate_consumption_report(days, hours=0):
 
 
 def _consumption_hourly(id, location):
-
-    total_decrease = 0
-
-    for entry in database.get_data(location, {'bin': id}):
-        pass
-
-    return total_decrease
+    return __consumption(id, location,0)
 
 
 def _consumption_daily(id, location):
-
-    total_decrease = 0
-
-    for entry in database.get_data(location, {'bin': id}):
-        pass
-
-    return total_decrease
-
+    return __consumption(id, location, 1)
 
 def _consumption_weekly(id, location):
-
-    total_decrease = 0
-
-    for entry in database.get_data(location, {'bin': id}):
-        pass
-
-    return total_decrease
-
+    return __consumption(id, location, 2)
 
 def _consumption_monthly(id, location):
-    total_decrease = 0
+    return __consumption(id, location, 3)
 
+def __comsumtion(id, location, type):
+    ret_val = list()
+    start = None
+    last = 0
+    
+    if type == 0:
+        time_delta = datetime.timedelta(hours=1)
+    elif type == 1:
+        time_delta = datetime.timedelta(days=1)
+    elif type == 2:
+        time_delta = datetime.timedelta(weeks=1)
+    elif type == 3:
+        time_delta = datetime.timedelta(months=1)
+    else:
+        return
+    
+    
     for entry in database.get_data(location, {'bin': id}):
-        pass
+        if start is None:
+            start = entry['date']
+        elif(entry['date'] - start) > time_delta:
+            ret_val.append(temp)
+            temp = dict()
+            temp['start time'] = start
+            temp['end time'] = entry['date']
+            start = entry['date']
+            temp['decrease'] = 0
+            temp['increase'] = 0
+        if entry['quantity'] > last:
+            temp['increase'] += entry['quantity'] - last
+        elif entry['quantity'] < last:
+            temp['decrease'] += last - entry['qauntity']
+        last = entry['quantity']
+            
+    return ret_val
 
-    return total_decrease
+
+
+

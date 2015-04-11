@@ -25,6 +25,8 @@ from Display_Controllers.SettingScreen import SettingsScreen
 from Display_Controllers.UpdateBinScreen import UpdateBinScreen
 from Display_Controllers.UpdateContact import UpdateContactScreen
 from Display_Controllers.NewContact import NewContactScreen
+from Display_Controllers.UpdateAlert import UpdateAlertScreen
+from Display_Controllers.NewAlert import NewAlertScreen
 
 def show_bin_names(ad):
     if len(ad.selection) == 0:
@@ -136,6 +138,8 @@ class MainApp(App):
         sm.add_widget(UpdateBinScreen(name="setting_update_bin"))
         sm.add_widget(UpdateContactScreen(name="setting_update_contact"))
         sm.add_widget(NewContactScreen(name="new_contact"))
+        sm.add_widget(UpdateAlertScreen(name="setting_update_alert"))
+        sm.add_widget(NewAlertScreen(name="new_alert"))
         sm.current = "main"
         MANAGER = sm
 

@@ -150,6 +150,9 @@ def _cleanup():
 def delete_contact(query):
     __remove(CONTACT, query)
 
+def delete_alert(query):
+    __remove(ALERT, query)
+
 def __remove(ty, query):
     if ty in collections:
         client = MongoClient()

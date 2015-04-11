@@ -37,9 +37,9 @@ class DataGrid(GridLayout):
             else:
                 prog = last_entry[-1]['quantity']
 
-            b.add_widget(Label(text=("{0:.1f}".format(prog*5.0/100)+" Kg"), size_hint_y=0.2, font_size=20))
+            b.add_widget(Label(text=("{0:.1f}".format(prog)+" Kg"), size_hint_y=0.2, font_size=20))
 
-            pb = ProgressBar(max=100, value=prog, padding=20, size_hint_y=0.6)
+            pb = ProgressBar(max=10000, value=prog, padding=20, size_hint_y=0.6)
             b.add_widget(pb)
 
             self.add_widget(b)

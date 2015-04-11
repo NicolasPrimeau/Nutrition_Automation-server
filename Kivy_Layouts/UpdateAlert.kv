@@ -1,0 +1,53 @@
+#:kivy 1.8.0
+
+<UpdateAlertScreen>:
+    UpdateAlertGrid:
+        size: root.size
+        rows:1
+        cols:3
+        spacing:10
+        padding:10
+
+        BackButtonGrid:
+            rows:3
+            cols:1
+            size_hint_x:0.25
+            spacing:10
+            Button:
+                background_normal: "Images/blank.png"
+                on_press:
+                    root.manager.transition.direction = 'right'
+                    root.manager.current = 'setting_alerts'
+                text:"Back"
+                color: 0,0,0,1
+                font_size: 30
+                size_hint_y: 0.33
+
+            Button:
+                background_normal: "Images/blank.png"
+                text:"Apply"
+                color: 0,0,0,1
+                font_size: 30
+                size_hint: 0.20, 0.20
+                size_hint_y: 0.33
+                on_press: root.add_alert()
+
+            Button:
+                background_normal: "Images/blank.png"
+                text:"Delete"
+                color: 0,0,0,1
+                font_size: 30
+                size_hint: 0.20, 0.20
+                size_hint_y: 0.33
+                on_press: root.delete_alert()
+
+
+        UpdateAlertDetailGrid:
+            rows:5
+            cols:1
+            spacing:10
+            SpaceGrid:
+                rows:1
+            SpaceGrid:
+                rows:1
+

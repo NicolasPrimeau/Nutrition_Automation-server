@@ -51,6 +51,9 @@ class BackButtonGrid(GridLayout):
 class SettingPanel(GridLayout):
     def update(self):
         self.clear_widgets()
+        self.rows = 7
+        self.cols = 1
+
         self.add_widget(Button(
                 background_normal="Images/blank.png",
                 text="Calibrate",

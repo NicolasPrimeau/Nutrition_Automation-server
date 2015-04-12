@@ -51,11 +51,11 @@ class BackButtonGrid(GridLayout):
 class SettingPanel(GridLayout):
     def update(self):
         self.clear_widgets()
-        self.rows = 7
+        self.rows = 5
         self.cols = 1
 
         self.add_widget(Button(
-                background_normal="Images/Box.png",
+                background_normal="Images/blank.png",
                 text="Calibrate",
                 color=(0,0,0,1),
                 font_size=30,
@@ -68,7 +68,7 @@ class SettingPanel(GridLayout):
                                     dual=(gui['unit'] is not None), name=entry['name']))
             i += 1
 
-        for entry in range(6-i):
+        for entry in range(4-i):
             self.add_widget(GridLayout(rows=1, cols=3))
 
     def __init__(self, **kwargs):
@@ -81,17 +81,22 @@ class BinGrid(GridLayout):
         super().__init__(**kwargs)
         self.rows = 1
         self.cols = 3
-        self.add_widget(Label(text="Bin "+str(bin) + (len(name)>0)*(": " + name.capitalize()), font_size=30))
+        self.add_widget(Label(text="Bin "+str(bin) + (len(name)>0)*(": " + name.capitalize()), font_size=30,
+                              size_hint_x=0.6))
 
         if not dual:
-            self.add_widget(Label(text="Weight Only"))
+            self.add_widget(Label(text="Weight Only", font_size=30, size_hint_x=0.4))
         elif type == 0:
-            self.add_widget(ToggleButton(text="Weight", group="bin"+str(bin), state="down", padding=(5, 5)))
+            self.add_widget(ToggleButton(text="Weight", font_size=30, group="bin"+str(bin), state="down",
+                                         padding=(5, 5), size_hint_x=0.2))
         else:
-            self.add_widget(ToggleButton(text="Weight", group="bin"+str(bin), padding=(5, 5)))
+            self.add_widget(ToggleButton(text="Weight", font_size=30, group="bin"+str(bin),
+                                         padding=(5, 5), size_hint_x=0.2))
 
         if type == 1 and dual:
-            self.add_widget(ToggleButton(text="Unit", group="bin"+str(bin), state="down", padding=(5, 5)))
+            self.add_widget(ToggleButton(text="Unit", group="bin"+str(bin), state="down", font_size=30,
+                                         padding=(5, 5), size_hint_x=0.2))
         elif dual:
-            self.add_widget(ToggleButton(text="Unit", group="bin"+str(bin), padding=(5, 5)))
+            self.add_widget(ToggleButton(text="Unit", group="bin"+str(bin), font_size=30,
+                                         padding=(5, 5), size_hint_x=0.2))
 

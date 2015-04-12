@@ -295,7 +295,7 @@ def __create_time_message(info):
     msg['message']['plain'] = info['date'].strftime("%Y-%m-%d") + "\n"
     msg['message']['html'] = "<p>" + msg['message']['plain'] + "</p><br>"
 
-    msg['message']['plain'] = "Stock for Bin " + str(info['bin']) + ":\n "
+    msg['message']['plain'] = "Stock for Bin " + str(info['bin'])+": "
     msg['message']['html'] = "<p>" + "Stock for Bin " + str(info['bin']) + ":\n "
 
 

@@ -31,12 +31,20 @@ class MessagesList(ListView):
         if len(concerns) != 0:
             concerns = concerns[0]['info']
             for msg in concerns:
-                msgs.append(re.sub("(.{60})", "\\1\n", msg['message']['plain'], 0, re.DOTALL))
+                msg = msg['message']['plain'].split(" ")
+                while len(msg) > 0:
+                    line = msg.pop(0)
+                    while (len(line) + 1 + len(msg[0])) < 50:
+                        line += " " + msg.pop(0)
+                        if len(msg) == 0:
+                            break
+                    msgs.append(line)
+                msgs.append(" ")
 
         list_item_args_converter = lambda row_index, text: {
             'text': text,
             'height': 50,
-            'font_size': 20
+            'font_size': 30
         }
 
         self.adapter = ListAdapter(data=msgs,

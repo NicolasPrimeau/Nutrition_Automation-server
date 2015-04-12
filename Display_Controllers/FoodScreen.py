@@ -36,7 +36,7 @@ class DataGrid(GridLayout):
         for bin in bins:
             b = GridLayout(cols=1, rows=3)
 
-            b.add_widget(Label(text=bin['name'].capitalize(), font_size=30, size_hint_y=0.2))
+            b.add_widget(Label(text=bin['name'].capitalize(), font_size=40, size_hint_y=0.2))
 
             last_entry = database_interface.get_data(database_interface.FOOD, query={'bin': bin['bin']}, sort="date")
 
@@ -46,14 +46,13 @@ class DataGrid(GridLayout):
                 prog = last_entry[-1]['quantity']
 
             if bin['display_type'] == 0:
-                b.add_widget(Label(text=("{0:.1f}".format(prog)+" g"), size_hint_y=0.2, font_size=20))
-
+                b.add_widget(Label(text=("{0:.1f}".format(prog)+" g"), size_hint_y=0.2, font_size=30))
                 pb = ProgressBar(max=100, value=prog/100, padding=20, size_hint_y=0.6)
                 b.add_widget(pb)
             elif bin['display_type'] == 1:
                 gui = database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME,
                                                   {'name': bin['name']})[0]
-                b.add_widget(Label(text=str(int(math.floor(prog/gui['unit']))) + " Units"))
+                b.add_widget(Label(text=str(int(math.floor(prog/gui['unit']))) + " Units", font_size=30))
                 b.add_widget(Label(text=""))
 
             self.add_widget(b)

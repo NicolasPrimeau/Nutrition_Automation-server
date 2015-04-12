@@ -37,10 +37,12 @@ class DataGrid(GridLayout):
             else:
                 prog = last_entry[-1]['quantity']
 
+            print(prog)
+
             if bin['display_type'] == 0:
                 b.add_widget(Label(text=("{0:.1f}".format(prog)+" Kg"), size_hint_y=0.2, font_size=20))
 
-                pb = ProgressBar(max=10000, value=prog, padding=20, size_hint_y=0.6)
+                pb = ProgressBar(max=10000, value=int(prog), padding=20, size_hint_y=0.6)
                 b.add_widget(pb)
             elif bin['display_type'] == 1:
                 gui = database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME,

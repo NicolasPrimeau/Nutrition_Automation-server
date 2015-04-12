@@ -142,15 +142,8 @@ class BinChoice(GridLayout):
 
 class BinCheckBox(CheckBox):
 
-    def on_checkbox_active(self, checkbox, value):
-        if value:
-            print('The checkbox', checkbox, 'is active')
-        else:
-            print('The checkbox', checkbox, 'is inactive')
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.bind(active=self.on_checkbox_active)
         self.size = (100, 100)
 
 class AlertTextInput(TextInput):

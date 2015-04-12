@@ -32,12 +32,13 @@ class DataGrid(GridLayout):
 
             last_entry = database_interface.get_data(database_interface.FOOD, query={'bin': bin['bin']}, sort="date")
 
+            print(last_entry)
+
             if len(last_entry) == 0:
                 prog = 0
             else:
-                prog = last_entry[0]['quantity']
+                prog = last_entry[-1]['quantity']
 
-            print(prog)
 
             if bin['display_type'] == 0:
                 b.add_widget(Label(text=("{0:.1f}".format(prog)+" Kg"), size_hint_y=0.2, font_size=20))

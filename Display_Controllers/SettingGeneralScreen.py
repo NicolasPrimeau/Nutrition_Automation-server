@@ -8,6 +8,7 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.label import Label
 import database_interface as db
 import display_controller as controller
+from kivy.uix.button import Button
 
 Builder.load_file('Kivy_Layouts/SettingGeneral.kv')
 
@@ -25,6 +26,16 @@ class SettingGeneralScreen(Screen):
                     elif bin_grid.children[1].state == "down":
                         db.update(db.CONFIG.BINS, {'bin':  bin}, {'$set': {'display_type': 0}})
 
+        controller.MANAGER.transition.direction = 'left'
+        controller.MANAGER.current = "main"
+
+    def calibrate(self):
+        for bin in db.get_data(db.CONFIG.BINS):
+            avg = 0
+            for data in db.get_data(db.FOOD, {'bin' : bin['bin']})[-3:-1]:
+                avg += float(data['quantity'])
+            avg /= 2
+            db.update(db.CONFIG.BINS, {'bin': bin['bin']}, {'$set': {'calibration': avg}})
         controller.MANAGER.transition.direction = 'right'
         controller.MANAGER.current = "main"
 
@@ -40,6 +51,15 @@ class BackButtonGrid(GridLayout):
 class SettingPanel(GridLayout):
     def update(self):
         self.clear_widgets()
+        self.add_widget(Button(
+                background_normal="Images/blank.png",
+                text="Calibrate",
+                color=(0,0,0,1),
+                font_size=30,
+                size_hint=(0.20, 0.20),
+                size_hint_y=0.2,
+                on_press=SettingGeneralScreen.calibrate
+        ))
         i = 0
         for entry in db.get_data(db.CONFIG.BINS):
             gui = db.get_data(db.GUIDELINES.SHELF_TIME, {'name': entry['name']})[0]
@@ -50,10 +70,10 @@ class SettingPanel(GridLayout):
         for entry in range(6-i):
             self.add_widget(GridLayout(rows=1, cols=3))
 
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.update()
+
 
 class BinGrid(GridLayout):
     def __init__(self, bin, type, dual, name="", **kwargs):
@@ -61,7 +81,6 @@ class BinGrid(GridLayout):
         self.rows = 1
         self.cols = 3
         self.add_widget(Label(text="Bin "+str(bin) + (len(name)>0)*(": " + name.capitalize())))
-
 
         if not dual:
             self.add_widget(Label(text="Weight Only"))

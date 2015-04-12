@@ -49,7 +49,10 @@ def startServer():
 def decode_data(data):
     info = json.loads(data.decode("utf-8"))
     info['bin'] = int(info['bin'])
-    info['quantity'] = float(info['quantity'])
+    bin = database_interface.get_data(database_interface.CONFIG.BINS, {'bin': info['bin']})[0]
+    info['quantity'] = float(info['quantity']) - bin['calibrate']
+    if info['quantity'] < 0:
+        info['quantity'] = 0
     info['date'] = datetime.datetime.now()
 
     return info

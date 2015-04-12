@@ -63,6 +63,7 @@ class NewAlertScreen(Screen):
         controller.MANAGER.get_screen("setting_alerts").children[0].children[0].children[0].update_alerts()
         controller.MANAGER.transition.direction = 'right'
         controller.MANAGER.current = "setting_alerts"
+        info.reset()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -73,13 +74,17 @@ class NewAlertGrid(GridLayout):
 
 
 class NewAlertDetailGrid(GridLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
+    def reset(self):
+        self.clear_widgets()
         self.add_widget(AlertTextInput(hint_text="Description", multiline=False))
         self.add_widget(AlertTextInput(hint_text="Minimum", multiline=False))
         self.add_widget(AlertTextInput(hint_text="Maximum", multiline=False))
         self.add_widget(BinGrid())
+
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.reset()
 
 
 class BinGrid(GridLayout):

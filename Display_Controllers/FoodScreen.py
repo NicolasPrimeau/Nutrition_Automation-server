@@ -7,6 +7,7 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.uix.label import Label
 import database_interface
 import display_controller as controller
+import math
 
 Builder.load_file('Kivy_Layouts/FoodScreen.kv')
 
@@ -45,7 +46,7 @@ class DataGrid(GridLayout):
             elif bin['display_type'] == 1:
                 gui = database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME,
                                                   {'name': bin['name']})[0]
-                b.add_widget(Label(text=str("{0:.1f}".format(prog/gui['unit'])) + " Units"))
+                b.add_widget(Label(text=str(int(math.floor(prog/gui['unit']))) + " Units"))
                 b.add_widget(Label(text=""))
 
             self.add_widget(b)

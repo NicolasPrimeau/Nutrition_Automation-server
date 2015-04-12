@@ -86,12 +86,12 @@ class BinGrid(GridLayout):
         if not dual:
             self.add_widget(Label(text="Weight Only"))
         elif type == 0:
-            self.add_widget(ToggleButton(text="Weight", group="bin"+str(bin), state="down", padding=5))
+            self.add_widget(ToggleButton(text="Weight", group="bin"+str(bin), state="down", padding=(5, 5)))
         else:
-            self.add_widget(ToggleButton(text="Weight", group="bin"+str(bin), padding=5))
+            self.add_widget(ToggleButton(text="Weight", group="bin"+str(bin), padding=(5, 5)))
 
         if type == 1 and dual:
-            self.add_widget(ToggleButton(text="Unit", group="bin"+str(bin), state="down", padding=5))
+            self.add_widget(ToggleButton(text="Unit", group="bin"+str(bin), state="down", padding=(5, 5)))
         elif dual:
-            self.add_widget(ToggleButton(text="Unit", group="bin"+str(bin), padding=5))
+            self.add_widget(ToggleButton(text="Unit", group="bin"+str(bin), padding=(5, 5)))
 

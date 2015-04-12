@@ -133,6 +133,7 @@ def configure_bin(new_bin):
     update(CONFIG.BINS, {'bin': new_bin['bin']}, {'$set': new_bin})
 
     for item in get_data(FOOD):
+	del item['_id']
         store_data(PURGED.DATA, item)
 
     __remove(FOOD, {'bin': new_bin['bin']})

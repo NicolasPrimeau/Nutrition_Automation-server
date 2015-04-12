@@ -32,7 +32,7 @@ def main():
     processes.append(Process(target = database_management))
 
     # start auto IP configuration server
-    processes.append(Process(target=auto_ip()))
+    processes.append(Process(target=auto_ip))
 
     # start TCP server
     processes.append(Process(target=start_server))
@@ -114,7 +114,7 @@ def auto_ip():
     sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
     sys.stdout.write("Auto IP server... Started\n")
 
-    #data_input.auto_ip()
+    data_input.auto_ip()
 
 
 # TCP Server handler

@@ -69,7 +69,7 @@ def auto_ip():
         ping_back = socket.gethostbyname(socket.gethostname())
 
         sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        sock.sendto(ping_back, (addr, port))
+        sock.sendto(ping_back.encode(), (addr, port+1))
 
         if len(database_interface.get_data(database_interface.CLIENTS, {'ip': addr})) == 0:
             database_interface.store_data(database_interface.CLIENTS,

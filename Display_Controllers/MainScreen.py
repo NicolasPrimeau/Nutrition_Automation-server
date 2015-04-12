@@ -15,7 +15,8 @@ class MainScreen(Screen):
         controller.update_and_view_food()
 
     def go_to_report(self):
-        controller.MANAGER.transition.direction = 'down'
+        controller.MANAGER.get_screen("setting_update_bin").children[-1].children[0].update()
+        controller.MANAGER.transition.direction = 'up'
         controller.MANAGER.current = "report"
 
 class MainGrid(GridLayout):

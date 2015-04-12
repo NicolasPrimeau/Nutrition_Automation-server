@@ -42,8 +42,8 @@ class ReportView(ListView):
         for section in report:
             document.append('-' * 50)
             document.append('Area: ' + str(section))
-            document.append('Name: ' + str(report[section]['name']))
-            document.append('Type: ' + str(report[section]['type']))
+            document.append('Name: ' + str(report[section]['name']).capitalize())
+            document.append('Type: ' + str(report[section]['type']).capitalize())
             if report[section]['date of purged'] is None:
                 document.append('Purged: No')
             else:
@@ -57,8 +57,8 @@ class ReportView(ListView):
                 for decade in con:
                     document.append('Start: ' + decade['start time'].strftime('%H:%M %a %d/%b'))
                     document.append('End: ' + decade['end time'].strftime('%H:%M %a %d/%b'))
-                    document.append('Decrease: ' + str(decade['decrease']))
-                    document.append('Increase: ' + str(decade['increase']))
+                    document.append('Decrease: ' + "{0:.2f}".format(decade['decrease']))
+                    document.append('Increase: ' + "{0:.2f}".format(decade['increase']))
                     document.append('-'*20)
                 document.pop()
 

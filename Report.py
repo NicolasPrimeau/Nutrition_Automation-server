@@ -61,7 +61,8 @@ def _consumption_monthly(id, location):
 def __consumption(id, location, time_delta):
     ret_val = list()
     start = None
-    last = 0
+    last = dict()
+    last['quantity'] = 0
     temp = None
 
     for entry in database.get_data(location, {'bin': id}):
@@ -78,13 +79,14 @@ def __consumption(id, location, time_delta):
             start = entry['date']
             temp['decrease'] = 0
             temp['increase'] = 0
-        if entry['quantity'] > last:
-            temp['increase'] += entry['quantity'] - last
-        elif entry['quantity'] < last:
-            temp['decrease'] += last - entry['quantity']
-        last = entry['quantity']
+        if entry['quantity'] > last['quantity']:
+            temp['increase'] += entry['quantity'] - last['quantity']
+        elif entry['quantity'] < last['quantity']:
+            temp['decrease'] += last['quantity'] - entry['quantity']
+        last = entry
     else:
         if temp is not None:
+            temp['end time'] = last['date']
             ret_val.append(temp)
             
     return ret_val

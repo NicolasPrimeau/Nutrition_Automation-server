@@ -64,14 +64,14 @@ config['calibration'] = 0
 
 food = dict()
 food['bin'] = 1
-food['quantity'] = 500.0
+food['quantity'] = 400.0
 food['date'] = datetime.datetime.now()
 
 database_interface.store_data(database_interface.FOOD, food)
 
 food = dict()
 food['bin'] = 2
-food['quantity'] = 500.0
+food['quantity'] = 200.0
 food['date'] = datetime.datetime.now()
 
 database_interface.store_data(database_interface.FOOD, food)

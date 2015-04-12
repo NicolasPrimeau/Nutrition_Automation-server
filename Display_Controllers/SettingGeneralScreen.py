@@ -55,9 +55,7 @@ class SettingPanel(GridLayout):
                 background_normal="Images/blank.png",
                 text="Calibrate",
                 color=(0,0,0,1),
-                font_size=30,
-                size_hint=(0.20, 0.20),
-                size_hint_y=0.2,
+                font_size=30,   
                 on_press=SettingGeneralScreen.calibrate
         ))
         i = 0

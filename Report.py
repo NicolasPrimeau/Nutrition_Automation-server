@@ -7,37 +7,43 @@ import database_interface as database
 def generate_consumption_report(days, hours=0):
     delay = datetime.datetime.now() - datetime.timedelta(days=days, hours=hours)
 
-    report = dict()
+    report = list()
     for bin in database.get_data(database.CONFIG.BINS):
-        report[bin['bin']] = dict()
-        report[bin['bin']]['name'] = bin['name']
-        report[bin['bin']]['type'] = bin['type']
-        report[bin['bin']]['date of purged'] = None
-        report[bin['bin']]['consumption'] = dict()
+        temp = dict()
+        temp['bin'] = bin['bin']
+        temp['name'] = bin['name']
+        temp['type'] = bin['type']
+        temp['date of purged'] = None
+        temp['consumption'] = dict()
         if hours >= 1:
-            report[bin['bin']]['consumption']['hourly'] = _consumption_hourly(bin['bin'], database.FOOD)
+            temp['consumption']['hourly'] = _consumption_hourly({'bin': bin['bin']}, database.FOOD)
         if days >= 1:
-            report[bin['bin']]['consumption']['daily'] = _consumption_daily(bin['bin'], database.FOOD)
+            temp['consumption']['daily'] = _consumption_daily({'bin': bin['bin']}, database.FOOD)
         if days >= 7:
-            report[bin['bin']]['consumption']['weekly'] = _consumption_weekly(bin['bin'], database.FOOD)
+            temp['consumption']['weekly'] = _consumption_weekly({'bin': bin['bin']}, database.FOOD)
         if days >= 30:
-            report[bin['bin']]['consumption']['monthly'] = _consumption_monthly(bin['bin'], database.FOOD)
+            temp['consumption']['monthly'] = _consumption_monthly({'bin': bin['bin']}, database.FOOD)
+        report.append(temp)
 
     # add purged bins
-    for bin in database.get_data(database.PURGED.BINS, {'date': {'date': {'$lte': delay}}}):
-        report[bin['bin']] = dict()
-        report[bin['bin']]['name'] = bin['name']
-        report[bin['bin']]['type'] = bin['type']
-        report[bin['bin']]['date of purged'] = bin['date']
-        report[bin['bin']]['consumption'] = dict()
+    for bin in database.get_data(database.PURGED.BINS):
+        if bin['date'] < delay:
+            continue
+        temp = dict()
+        temp['bin'] = bin['bin']
+        temp['name'] = bin['name']
+        temp['type'] = bin['type']
+        temp['date of purged'] = bin['date']
+        temp['consumption'] = dict()
         if hours >= 1:
-            report[bin['bin']]['consumption']['hourly'] = _consumption_hourly(bin['bin'], database.FOOD)
+            temp['consumption']['hourly'] = _consumption_hourly({'bin_id': bin['bin_id']}, database.PURGED.DATA)
         if days >= 1:
-            report[bin['bin']]['consumption']['daily'] = _consumption_daily(bin['bin'], database.FOOD)
+            temp['consumption']['daily'] = _consumption_daily({'bin_id': bin['bin_id']}, database.PURGED.DATA)
         if days >= 7:
-            report[bin['bin']]['consumption']['weekly'] = _consumption_weekly(bin['bin'], database.FOOD)
+            temp['consumption']['weekly'] = _consumption_weekly({'bin_id': bin['bin_id']}, database.PURGED.DATA)
         if days >= 30:
-            report[bin['bin']]['consumption']['monthly'] = _consumption_monthly(bin['bin'], database.FOOD)
+            temp['consumption']['monthly'] = _consumption_monthly({'bin_id': bin['bin_id']}, database.PURGED.DATA)
+        report.append(temp)
 
     return report
 
@@ -58,14 +64,14 @@ def _consumption_monthly(id, location):
     return __consumption(id, location, datetime.timedelta(days=30))
 
 
-def __consumption(id, location, time_delta):
+def __consumption(query, location, time_delta):
     ret_val = list()
     start = None
     last = dict()
     last['quantity'] = 0
     temp = None
 
-    for entry in database.get_data(location, {'bin': id}):
+    for entry in database.get_data(location, query):
 
         if start is None:
             start = entry['date']

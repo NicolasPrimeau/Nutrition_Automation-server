@@ -48,31 +48,33 @@ config = dict()
 config['bin'] = 1
 config['name'] = 'steak'
 config['type'] = 'meat'
+config['date'] = datetime.datetime.now()
 config['display_type'] = 0
 config['calibration'] = 0
 
-#database_interface.store_data(database_interface.CONFIG.BINS, config)
+database_interface.store_data(database_interface.CONFIG.BINS, config)
 
 config = dict()
 config['bin'] = 2
 config['name'] = "bacon"
 config['type'] = "meat"
+config['date'] = datetime.datetime.now()
 config['display_type'] = 0
 config['calibration'] = 0
 
-#database_interface.store_data(database_interface.CONFIG.BINS, config)
+database_interface.store_data(database_interface.CONFIG.BINS, config)
 
 food = dict()
 food['bin'] = 1
 food['quantity'] = 400.0
 food['date'] = datetime.datetime.now()
 
-database_interface.store_data(database_interface.FOOD, food)
+#database_interface.store_data(database_interface.FOOD, food)
 
 food = dict()
 food['bin'] = 2
 food['quantity'] = 200.0
 food['date'] = datetime.datetime.now()
 
-database_interface.store_data(database_interface.FOOD, food)
+#database_interface.store_data(database_interface.FOOD, food)
 

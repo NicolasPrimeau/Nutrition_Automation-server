@@ -41,15 +41,16 @@ class ReportView(ListView):
         document = list()
         for section in report:
             document.append('-' * 50)
-            document.append('Area: ' + str(section))
-            document.append('Name: ' + str(report[section]['name']).capitalize())
-            document.append('Type: ' + str(report[section]['type']).capitalize())
-            if report[section]['date of purged'] is None:
+            document.append('Area: ' + str(section['bin']))
+            document.append('Name: ' + str(section['name']).capitalize())
+            document.append('Type: ' + str(section['type']).capitalize())
+            if section['date of purged'] is None:
                 document.append('Purged: No')
             else:
                 document.append('Purged: Yes (' +
-                                report[section]['date of purged'] + " )")
-
+                                section['date of purged'].strftime('%H:%M %a %d/%b') + " )")
+            document.append('-' * 50)
+            
             def print_consumption(con, title):
                 document.append('-' * 30)
                 document.append(title.capitalize())
@@ -62,17 +63,17 @@ class ReportView(ListView):
                     document.append('-'*20)
                 document.pop()
 
-            if 'hourly' in report[section]['consumption']:
-                print_consumption(report[section]['consumption']['hourly'], 'hourly')
+            if 'hourly' in section['consumption']:
+                print_consumption(section['consumption']['hourly'], 'hourly')
 
-            if 'daily' in report[section]['consumption']:
-                print_consumption(report[section]['consumption']['daily'], 'daily')
+            if 'daily' in section['consumption']:
+                print_consumption(section['consumption']['daily'], 'daily')
 
-            if 'weekly' in report[section]['consumption']:
-                print_consumption(report[section]['consumption']['weekly'], 'weekly')
+            if 'weekly' in section['consumption']:
+                print_consumption(section['consumption']['weekly'], 'weekly')
 
-            if 'monthly' in report[section]['consumption']:
-                print_consumption(report[section]['consumption']['monthly'], 'monthly')
+            if 'monthly' in section['consumption']:
+                print_consumption(section['consumption']['monthly'], 'monthly')
 
         list_adapter = ListAdapter(data=document, cls=ReportLine)
         self.adapter = list_adapter

@@ -126,6 +126,8 @@ def count(ty, query=dict()):
 def configure_bin(new_bin):
     old_bin = get_data(CONFIG.BINS, {'bin': new_bin['bin']}, single=True)
     old_bin['date'] = datetime.datetime.now()
+    old_bin['bin_id'] = old_bin['_id']
+    bin_id = old_bin['_id']
     del old_bin['_id']
 
     store_data(PURGED.BINS, old_bin)
@@ -134,6 +136,7 @@ def configure_bin(new_bin):
 
     for item in get_data(FOOD):
         del item['_id']
+        item['bin_id'] = bin_id
         store_data(PURGED.DATA, item)
 
     __remove(FOOD, {'bin': new_bin['bin']})

@@ -141,13 +141,11 @@ class BinChoice(GridLayout):
 
 
 class BinCheckBox(CheckBox):
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.size = (100, 100)
 
 class AlertTextInput(TextInput):
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.font_size = 30

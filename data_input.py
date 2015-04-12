@@ -48,6 +48,7 @@ def startServer():
 # Decode from protocol, convert into dictionary
 def decode_data(data):
     info = json.loads(data.decode("utf-8"))
+    info['bin'] = int(info['bin'])
     info['quantity'] = float(info['quantity'])
     info['date'] = datetime.datetime.now()
 

@@ -5,8 +5,6 @@ import database_interface as database
 
 
 def generate_consumption_report(days, hours=0):
-
-
     delay = datetime.datetime.now() - datetime.timedelta(days=days, hours=hours)
 
     report = dict()
@@ -23,7 +21,7 @@ def generate_consumption_report(days, hours=0):
         if days >= 7:
             report[bin['bin']]['consumption']['weekly'] = _consumption_weekly(bin['bin'], database.FOOD)
         if days >= 30:
-            report[bin['bin']]['consumption']['weekly'] = _consumption_monthly(bin['bin'], database.FOOD)
+            report[bin['bin']]['consumption']['monthly'] = _consumption_monthly(bin['bin'], database.FOOD)
 
     # add purged bins
     for bin in database.get_data(database.PURGED.BINS, {'date': {'date': {'$lte': delay}}}):
@@ -39,46 +37,41 @@ def generate_consumption_report(days, hours=0):
         if days >= 7:
             report[bin['bin']]['consumption']['weekly'] = _consumption_weekly(bin['bin'], database.FOOD)
         if days >= 30:
-            report[bin['bin']]['consumption']['weekly'] = _consumption_monthly(bin['bin'], database.FOOD)
+            report[bin['bin']]['consumption']['monthly'] = _consumption_monthly(bin['bin'], database.FOOD)
 
     return report
 
 
 def _consumption_hourly(id, location):
-    return __consumption(id, location,0)
+    return __consumption(id, location, datetime.timedelta(hours=1))
 
 
 def _consumption_daily(id, location):
-    return __consumption(id, location, 1)
+    return __consumption(id, location, datetime.timedelta(days=1))
+
 
 def _consumption_weekly(id, location):
-    return __consumption(id, location, 2)
+    return __consumption(id, location, datetime.timedelta(weeks=1))
+
 
 def _consumption_monthly(id, location):
-    return __consumption(id, location, 3)
+    return __consumption(id, location, datetime.timedelta(days=30))
 
-def __comsumtion(id, location, type):
+
+def __consumption(id, location, time_delta):
     ret_val = list()
     start = None
     last = 0
-    
-    if type == 0:
-        time_delta = datetime.timedelta(hours=1)
-    elif type == 1:
-        time_delta = datetime.timedelta(days=1)
-    elif type == 2:
-        time_delta = datetime.timedelta(weeks=1)
-    elif type == 3:
-        time_delta = datetime.timedelta(months=1)
-    else:
-        return
-    
-    
+    temp = None
+
     for entry in database.get_data(location, {'bin': id}):
+
         if start is None:
             start = entry['date']
-        elif(entry['date'] - start) > time_delta:
-            ret_val.append(temp)
+
+        if(entry['date'] - start) > time_delta or start == entry['date']:
+            if start != entry['date']:
+                ret_val.append(temp)
             temp = dict()
             temp['start time'] = start
             temp['end time'] = entry['date']
@@ -88,8 +81,11 @@ def __comsumtion(id, location, type):
         if entry['quantity'] > last:
             temp['increase'] += entry['quantity'] - last
         elif entry['quantity'] < last:
-            temp['decrease'] += last - entry['qauntity']
+            temp['decrease'] += last - entry['quantity']
         last = entry['quantity']
+    else:
+        if temp is not None:
+            ret_val.append(temp)
             
     return ret_val
 

@@ -55,7 +55,7 @@ class SettingPanel(GridLayout):
         self.cols = 1
 
         self.add_widget(Button(
-                background_normal="Images/blank.png",
+                background_normal="Images/Box.png",
                 text="Calibrate",
                 color=(0,0,0,1),
                 font_size=30,
@@ -81,17 +81,17 @@ class BinGrid(GridLayout):
         super().__init__(**kwargs)
         self.rows = 1
         self.cols = 3
-        self.add_widget(Label(text="Bin "+str(bin) + (len(name)>0)*(": " + name.capitalize())))
+        self.add_widget(Label(text="Bin "+str(bin) + (len(name)>0)*(": " + name.capitalize()), font_size=30))
 
         if not dual:
             self.add_widget(Label(text="Weight Only"))
         elif type == 0:
-            self.add_widget(ToggleButton(text="Weight", group="bin"+str(bin), state="down"))
+            self.add_widget(ToggleButton(text="Weight", group="bin"+str(bin), state="down", padding=5))
         else:
-            self.add_widget(ToggleButton(text="Weight", group="bin"+str(bin)))
+            self.add_widget(ToggleButton(text="Weight", group="bin"+str(bin), padding=5))
 
         if type == 1 and dual:
-            self.add_widget(ToggleButton(text="Unit", group="bin"+str(bin), state="down"))
+            self.add_widget(ToggleButton(text="Unit", group="bin"+str(bin), state="down", padding=5))
         elif dual:
-            self.add_widget(ToggleButton(text="Unit", group="bin"+str(bin)))
+            self.add_widget(ToggleButton(text="Unit", group="bin"+str(bin), padding=5))
 

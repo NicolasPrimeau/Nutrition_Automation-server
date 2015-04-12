@@ -16,7 +16,7 @@ class UpdateBinScreen(Screen):
     def config_bin(self):
 
         name_list = self.children[0].children[0].children[0]
-        type_list = self.children[0].children[0].children[0]
+        type_list = self.children[0].children[0].children[1]
 
         if len(name_list.adapter.selection) == 0 or len(name_list.adapter.selection) == 0:
             return

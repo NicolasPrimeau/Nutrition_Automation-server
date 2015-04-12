@@ -35,7 +35,7 @@ class DataGrid(GridLayout):
             if len(last_entry) == 0:
                 prog = 0
             else:
-                prog = last_entry[-1]['quantity']
+                prog = last_entry[0]['quantity']
 
             print(prog)
 

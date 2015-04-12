@@ -40,7 +40,7 @@ class ReportView(ListView):
         report = Report.generate_consumption_report(8, hours=1)
         document = list()
         for section in report:
-            document.append('-' * 50)
+            document.append('=' * 40)
             document.append('Area: ' + str(section['bin']))
             document.append('Name: ' + str(section['name']).capitalize())
             document.append('Type: ' + str(section['type']).capitalize())
@@ -49,17 +49,25 @@ class ReportView(ListView):
             else:
                 document.append('Purged: Yes (' +
                                 section['date of purged'].strftime('%H:%M %a %d/%b') + " )")
-            document.append('-' * 50)
-            
+            document.append('=' * 40)
+
             def print_consumption(con, title):
                 document.append('-' * 30)
                 document.append(title.capitalize())
                 document.append('-' * 30)
+                if len(con) == 0 or con is None:
+                    document.append('( No data )')
+                    return
+                if title == "hourly":
+                    format = '%H:%M %a %d/%b'
+                else:
+                    format = '%a %d/%b'
                 for decade in con:
-                    document.append('Start: ' + decade['start time'].strftime('%H:%M %a %d/%b'))
-                    document.append('End: ' + decade['end time'].strftime('%H:%M %a %d/%b'))
+                    document.append(decade['start time'].strftime(format) + ' to ' +
+                                    decade['end time'].strftime(format))
                     document.append('Decrease: ' + "{0:.2f}".format(decade['decrease']))
                     document.append('Increase: ' + "{0:.2f}".format(decade['increase']))
+                    document.append('Difference: ' + "{0:.2f}".format(decade['difference']))
                     document.append('-'*20)
                 document.pop()
 

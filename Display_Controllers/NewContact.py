@@ -6,6 +6,7 @@ from kivy.uix.screenmanager import Screen
 import database_interface
 import display_controller as controller
 from kivy.uix.textinput import TextInput
+from kivy.uix.label import Label
 
 Builder.load_file('Kivy_Layouts/NewContact.kv')
 
@@ -23,6 +24,8 @@ class NewContactScreen(Screen):
             contact['email'] = info.children[-2].text[0:40].lstrip().rstrip()
         elif '@' in info.children[-2].text:
             contact['email'] = info.children[-2].text.lstrip().rstrip()
+        else:
+            contact['email'] = ''
         if len(info.children[-3].text)>10:
             contact['phone'] = info.children[-3].text[0:10].lstrip().rstrip()
         else:
@@ -35,6 +38,7 @@ class NewContactScreen(Screen):
 
         controller.MANAGER.transition.direction = 'right'
         controller.MANAGER.current = "setting_contact"
+        info.reset()
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -45,11 +49,19 @@ class NewContactGrid(GridLayout):
 
 
 class NewContactDetailGrid(GridLayout):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def reset(self):
+        self.clear_widgets()
+        self.rows = 5
+        self.cols = 1
         self.add_widget(ContactTextInput(hint_text="Name", multiline=False))
         self.add_widget(ContactTextInput(hint_text="Email", multiline=False))
         self.add_widget(ContactTextInput(hint_text="Phone", multiline=False))
+        self.add_widget(Label(text=""))
+        self.add_widget(Label(text=""))
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.reset()
 
 
 class ContactTextInput(TextInput):

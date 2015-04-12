@@ -6,8 +6,6 @@ from kivy.uix.screenmanager import ScreenManager
 import database_interface
 from kivy.adapters.models import SelectableDataItem
 from kivy.app import App
-from kivy.adapters.listadapter import ListAdapter
-from kivy.uix.listview import ListView, ListItemButton
 from kivy.config import Config
 
 MANAGER = None
@@ -28,40 +26,6 @@ from Display_Controllers.NewContact import NewContactScreen
 from Display_Controllers.UpdateAlert import UpdateAlertScreen
 from Display_Controllers.NewAlert import NewAlertScreen
 from Display_Controllers.ReportScreen import ReportScreen
-
-def show_bin_names(ad):
-    if len(ad.selection) == 0:
-        return
-
-    global MANAGER
-
-    type_list = MANAGER.get_screen("setting_update_bin").children[-1]
-
-    type_list = type_list.children[0]
-    type_list.remove_widget(type_list.children[0])
-
-    names = list()
-
-    for entry in database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME,
-                                             query={'type': ad.selection[0].text.lower()}):
-
-        if entry['name'].capitalize() not in names:
-            names.append(entry['name'].capitalize())
-
-    list_item_args_converter = lambda row_index, info: {
-        'text': info,
-        'height': 100,
-        'selected_color': [0.2, 5, 0.5, 1.],
-        'deselected_color': [1, 1, 1, 1.],
-        'background_color': [1, 1, 1, 0.],
-        'background_normal': "Images/Box.png",
-        'color': [0, 0, 0, 1.],
-        'padding': (5, 5)
-    }
-    ad = ListAdapter(data=names,
-                     args_converter=list_item_args_converter,
-                     cls=ListItemButton)
-    type_list.add_widget(ListView(adapter=ad))
 
 
 def update_all_bins():

@@ -37,6 +37,7 @@ class SettingAreasList(ListView):
 
         list_item_args_converter = lambda row_index, obj: {
             'text': obj.text,
+            'font_size': 30,
             'height': 100,
             'selected_color': [0.2, 5, 0.5, 1.],
             'deselected_color': [1, 1, 1, 1.],

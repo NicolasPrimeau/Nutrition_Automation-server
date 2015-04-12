@@ -74,17 +74,22 @@ def __consumption(query, location, time_delta):
     for entry in database.get_data(location, query):
 
         if start is None:
-            start = entry['date']
-
-        if(entry['date'] - start) > time_delta or start == entry['date']:
-            if start != entry['date']:
-                ret_val.append(temp)
+            start = __get_start(entry['date'], time_delta)
             temp = dict()
             temp['start time'] = start
-            temp['end time'] = entry['date']
-            start = entry['date']
             temp['decrease'] = 0
             temp['increase'] = 0
+
+        if(entry['date'] - start) > time_delta:
+            temp['difference'] = temp['increase'] - temp['decrease']
+            temp['end time'] = start+time_delta
+            ret_val.append(temp)
+            start = __get_start(entry['date'], time_delta)
+            temp = dict()
+            temp['start time'] = start
+            temp['decrease'] = 0
+            temp['increase'] = 0
+
         if entry['quantity'] > last['quantity']:
             temp['increase'] += entry['quantity'] - last['quantity']
         elif entry['quantity'] < last['quantity']:
@@ -92,7 +97,8 @@ def __consumption(query, location, time_delta):
         last = entry
     else:
         if temp is not None:
-            temp['end time'] = last['date']
+            temp['difference'] = temp['increase'] - temp['decrease']
+            temp['end time'] = start+time_delta
             ret_val.append(temp)
             
     return ret_val
@@ -100,3 +106,24 @@ def __consumption(query, location, time_delta):
 
 
 
+def __get_start(start, td):
+    if td <= datetime.timedelta(hours=1):
+        return datetime.datetime(year=start.year,
+                                 month=start.month,
+                                 day=start.day,
+                                 hour=start.hour)
+    elif td <= datetime.timedelta(days=1):
+        return datetime.datetime(year=start.year,
+                                 month=start.month,
+                                 day=start.day,
+                                 hour=0)
+    elif td <= datetime.timedelta(days=7):
+        return datetime.datetime(year=start.year,
+                                 month=start.month,
+                                 day=(int(start.day/7)*7),
+                                 hour=0)
+    elif td <= datetime.timedelta(days=30):
+        return datetime.datetime(year=start.year,
+                                 month=start.month,
+                                 day=1,
+                                 hour=0)

@@ -25,6 +25,13 @@ class DataGrid(GridLayout):
         self.clear_widgets()
 
         bins = controller.sort_bin(database_interface.get_data(database_interface.CONFIG.BINS))
+        if len(bins) <= 3:
+            self.rows = 1
+            self.cols = len(bins)
+        else:
+            self.rows = 2
+            self.cols = 3
+
 
         for bin in bins:
             b = GridLayout(cols=1, rows=3)

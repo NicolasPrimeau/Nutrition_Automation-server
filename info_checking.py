@@ -47,7 +47,7 @@ def _check_time_alerts():
     for bin in database_interface.get_data(database_interface.CONFIG.BINS, {'bin': {'$gt': 0}}):
         guide = database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME, {'name': bin['name'].lower()}, single=True)
         if guide == None:
-            return
+            return []
 
         i = guide['fridge']['min'].split(",")
 
@@ -73,10 +73,11 @@ def _check_time_alerts():
         query['target_bins'] = bin['bin']
         query['type'] = 'quantity'
 
-        al = database_interface.get_data(database_interface.ALERT, query)[0]
-        if len(al) < 0:
-            minimum = 5
+        al = database_interface.get_data(database_interface.ALERT, query)
+        if len(al) == 0:
+            minimum = 0
         else:
+            al = al[0]
             minimum = al['flag']['min']
 
         data_since = __sort_by_date(data_since)
@@ -94,6 +95,7 @@ def _check_time_alerts():
                     misses += 1
                 else:
                     misses += 1
+                continue
             elif last_miss:
                 if i-first > e-f:
                     f = first
@@ -116,15 +118,14 @@ def _check_time_alerts():
         info['bin'] = bin['bin']
         info['date'] = datetime.datetime.now()
 
-
         if (data_since[e]['date']-data_since[f]['date']) >= time:
             print("\nTime delta\n")
             info['msg'] = "The food was out of the fridge for longer than the recommended time, it may be bad."
-            alerts.append(__create_time_message(info, al))
+            alerts.append(__create_time_message(info))
         elif misses < 3:
             print("\nMisses:" + str(misses) + "\n")
             info['msg'] = "The food has possibly spoiled"
-            alerts.append(__create_time_message(info, al))
+            alerts.append(__create_time_message(info))
 
     return alerts
 
@@ -188,7 +189,7 @@ def _check_quantity_alert(al):
         if ty is not None:
             problems.append(__create_quantity_message(
                 {"bin": key, "quantity": stats_data[key]['avg'], "date": stats_data[key]['last_reading_date'],
-                 "type": ty}, al))
+                 "type": ty}))
 
     return problems
 
@@ -245,9 +246,9 @@ def consistency_check():
             print("Bin " + str(key) + " has highly inconsistent data")
 
 
-def __create_quantity_message(info, ale):
+def __create_quantity_message(info):
 
-    contacts = database_interface.get_data(database_interface.CONTACT, query)
+    contacts = database_interface.get_data(database_interface.CONTACT)
 
     msg = dict()
     msg['address'] = []
@@ -276,7 +277,7 @@ def __create_quantity_message(info, ale):
     return msg
 
 
-def __create_time_message(info, ale):
+def __create_time_message(info):
 
     contacts = database_interface.get_data(database_interface.CONTACT)
 

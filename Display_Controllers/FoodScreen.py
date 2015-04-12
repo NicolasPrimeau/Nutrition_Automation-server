@@ -45,7 +45,7 @@ class DataGrid(GridLayout):
             elif bin['display_type'] == 1:
                 gui = database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME,
                                                   {'name': bin['name']})[0]
-                b.add_widget(Label(text=str(prog/gui['unit']) + " Units"))
+                b.add_widget(Label(text=str("{0:.1f}".format(prog/gui['unit'])) + " Units"))
                 b.add_widget(Label(text=""))
 
             self.add_widget(b)

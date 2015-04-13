@@ -36,7 +36,7 @@ def startServer():
 
         conn, addr = serv.accept()
 
-        print("Accepted connection")
+        #print("Accepted connection")
 
         while 1:
             data = conn.recv(BUFSIZE)

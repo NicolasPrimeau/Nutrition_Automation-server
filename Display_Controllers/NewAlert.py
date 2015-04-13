@@ -20,7 +20,7 @@ class NewAlertScreen(Screen):
         info = controller.MANAGER.get_screen("new_alert").children[0].children[0]
         alarm = dict()
         alarm['description'] = ""
-        alarm['type'] = ""
+        alarm['type'] = "quantity"
         alarm['flag'] = dict()
         alarm['flag']['max'] = 0
         alarm['flag']['min'] = 0
@@ -95,7 +95,7 @@ class BinGrid(GridLayout):
         self.padding = 10
 
         for i in range(database_interface.count(database_interface.CONFIG.BINS)):
-            self.add_widget(BinChoice(text="Bin "+str(i)))
+            self.add_widget(BinChoice(text="Bin "+str(i+1)))
 
 
 class BinChoice(GridLayout):

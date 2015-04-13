@@ -12,6 +12,7 @@ TIME_LENGTHS = list()
 temp = dict()
 temp['name'] = 'milk'
 temp['type'] = 'liquid'
+temp['unit'] = None
 temp['fridge'] = {'min': "5", 'max': "7"}
 temp['pantry'] = {'min': "1 hours", 'max': "1 hours"}
 TIME_LENGTHS.append(temp)
@@ -19,6 +20,7 @@ TIME_LENGTHS.append(temp)
 temp = dict()
 temp['name'] = 'orange juice'
 temp['type'] = 'liquid'
+temp['unit'] = None
 temp['fridge'] = {'min': "5", 'max': "7"}
 temp['pantry'] = {'min': "1 hours", 'max': "1 hours"}
 TIME_LENGTHS.append(temp)
@@ -26,6 +28,7 @@ TIME_LENGTHS.append(temp)
 temp = dict()
 temp['name'] = 'apple cider'
 temp['type'] = 'liquid'
+temp['unit'] = None
 temp['fridge'] = {'min': "5", 'max': "7"}
 temp['pantry'] = {'min': "1 hours", 'max': "1 hours"}
 TIME_LENGTHS.append(temp)

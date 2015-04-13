@@ -31,8 +31,6 @@ from Display_Controllers.ReportScreen import ReportScreen
 def update_all_bins():
     bin_grid = MANAGER.get_screen("setting_areas").children[0].children[0]
 
-    MANAGER.get_screen("setting_general").children[0].children[0].update()
-
     bin_grid.clear_widgets()
     bin_grid.add_widget(SettingAreasList())
 
@@ -50,9 +48,10 @@ def sort_bin(bins):
 
 
 def update_and_view_food():
+    MANAGER.transition.direction = 'down'
+    MANAGER.current="food"
     bin_grid = MANAGER.get_screen("food").children[0]
     bin_grid.children[1].update()
-    MANAGER.current="food"
 
 
 def go_to_update(value):

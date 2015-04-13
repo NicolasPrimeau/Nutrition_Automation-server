@@ -51,8 +51,7 @@
             Button:
                 background_normal: "Images/blank.png"
                 on_press:
-                    root.manager.transition.direction = 'left'
-                    root.manager.current = 'setting_general'
+                    root.go_to_general()
                 text:"General"
                 color: 0,0,0,1
                 font_size: 30

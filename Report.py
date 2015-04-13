@@ -8,6 +8,8 @@ def generate_consumption_report(days, hours=0):
     delay = datetime.datetime.now() - datetime.timedelta(days=days, hours=hours)
 
     report = list()
+    food_data = database.get_data(database.FOOD)
+    purged_data = database.get_data(database.PURGED.DATA)
     for bin in database.get_data(database.CONFIG.BINS):
         temp = dict()
         temp['bin'] = bin['bin']
@@ -16,13 +18,13 @@ def generate_consumption_report(days, hours=0):
         temp['date of purged'] = None
         temp['consumption'] = dict()
         if hours >= 1:
-            temp['consumption']['hourly'] = _consumption_hourly({'bin': bin['bin']}, database.FOOD)
+            temp['consumption']['hourly'] = _consumption_hourly(bin['bin'], food_data)
         if days >= 1:
-            temp['consumption']['daily'] = _consumption_daily({'bin': bin['bin']}, database.FOOD)
+            temp['consumption']['daily'] = _consumption_daily(bin['bin'], food_data)
         if days >= 7:
-            temp['consumption']['weekly'] = _consumption_weekly({'bin': bin['bin']}, database.FOOD)
+            temp['consumption']['weekly'] = _consumption_weekly(bin['bin'], food_data)
         if days >= 30:
-            temp['consumption']['monthly'] = _consumption_monthly({'bin': bin['bin']}, database.FOOD)
+            temp['consumption']['monthly'] = _consumption_monthly(bin['bin'], food_data)
         report.append(temp)
 
     # add purged bins
@@ -36,13 +38,13 @@ def generate_consumption_report(days, hours=0):
         temp['date of purged'] = bin['date']
         temp['consumption'] = dict()
         if hours >= 1:
-            temp['consumption']['hourly'] = _consumption_hourly({'bin_id': bin['bin_id']}, database.PURGED.DATA)
+            temp['consumption']['hourly'] = _consumption_hourly(bin['bin_id'], purged_data)
         if days >= 1:
-            temp['consumption']['daily'] = _consumption_daily({'bin_id': bin['bin_id']}, database.PURGED.DATA)
+            temp['consumption']['daily'] = _consumption_daily(bin['bin_id'], purged_data)
         if days >= 7:
-            temp['consumption']['weekly'] = _consumption_weekly({'bin_id': bin['bin_id']}, database.PURGED.DATA)
+            temp['consumption']['weekly'] = _consumption_weekly(bin['bin_id'], purged_data)
         if days >= 30:
-            temp['consumption']['monthly'] = _consumption_monthly({'bin_id': bin['bin_id']}, database.PURGED.DATA)
+            temp['consumption']['monthly'] = _consumption_monthly(bin['bin_id'], purged_data)
         report.append(temp)
 
     return report
@@ -70,8 +72,13 @@ def __consumption(query, location, time_delta):
     last = dict()
     last['quantity'] = 0
     temp = None
-
-    for entry in database.get_data(location, query):
+  
+    for entry in location:
+        if 'bin_id' in entry:
+            if entry['bin_id'] != query:
+                continue
+        elif int(entry['bin']) != int(query):
+            continue
 
         if start is None:
             start = __get_start(entry['date'], time_delta)

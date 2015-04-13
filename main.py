@@ -16,12 +16,7 @@ if "--no-gui" not in sys.argv:
 def main():
     processes = []
 
-    # setup database/ check for proper setup
-    setup_p = Process(target = setup)
-    setup_p.start()
-    setup_p.join()
-
-    del setup_p
+    setup()
 
     # Start Info checking
     # !! Not Implemented !!

@@ -32,11 +32,13 @@ class UpdateBinScreen(Screen):
         new_bin['date'] = datetime.datetime.now()
         new_bin['display_type'] = 0
 
+
+        controller.MANAGER.transition.direction = 'right'
+        controller.MANAGER.current = 'main'
+
         database_interface.configure_bin(new_bin)
 
         controller.update_all_bins()
-        controller.MANAGER.transition.direction = 'right'
-        controller.MANAGER.current = "main"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

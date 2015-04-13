@@ -43,8 +43,13 @@ collections[PLAIN_TEXT_MESSAGES] = "plain_concerns"
 collections[PURGED.BINS] = "purged_bins"
 collections[PURGED.DATA] = "purged_data"
 
+client = None
+db = None
+
 
 def __setup():
+    global client
+    global db
     # prime database with guideline information
     client = MongoClient()
     db = client[__DATABASE]
@@ -54,26 +59,20 @@ def __setup():
         collection.remove({'name': struct['name']})
         collection.insert(struct)
 
-    client.close()
     return
 
 
 # Data is a dictionary, type is a string or integer
 def store_data(ty, data):
     if isinstance(data, dict) and ty in collections:
-        client = MongoClient()
-        db = client[__DATABASE]
         collection = db[collections[ty]]
         collection.insert(data)
-        client.close()
     else:
         raise LookupError("No Such Collection")
 
 
 def get_data(ty, query=dict(), single=False,sort=""):
     if ty in collections:
-        client = MongoClient()
-        db = client[__DATABASE]
         collection = db[collections[ty]]
         if not single:
             if query == {} and not sort == "":
@@ -84,22 +83,16 @@ def get_data(ty, query=dict(), single=False,sort=""):
                 iterator = collection.find(query).sort(sort, 1)
             else:
                 iterator = collection.find(query)
-
-            results = list()
-            for ar in iterator:
-                results.append(ar)
-
         else:
             if query == {} and not sort == "":
-                results = collection.find_one()
+                iterator = collection.find_one()
             elif query == {} and sort != "":
-                results = collection.find_one().sort(sort, 1)
+                iterator = collection.find_one().sort(sort, 1)
             elif sort != "":
-                results = collection.find_one(query).sort(sort, 1)
+                iterator = collection.find_one(query).sort(sort, 1)
             else:
-                results = collection.find_one(query)
-        client.close()
-        return results
+                iterator = collection.find_one(query)
+        return iterator
     else:
         raise LookupError("No Such Collection")
 
@@ -108,23 +101,17 @@ def get_data(ty, query=dict(), single=False,sort=""):
 
 def update(ty, query, updat, create=False):
     if ty in collections:
-        client = MongoClient()
-        db = client[__DATABASE]
         collection = db[collections[ty]]
         if collection.count() == 0 and create:
             collection.insert(updat)
         else:
             collection.update(query, updat)
-        client.close()
 
 
 def count(ty, query=dict()):
     if ty in collections:
-        client = MongoClient()
-        db = client[__DATABASE]
         collection = db[collections[ty]]
         cnt = collection.count()
-        client.close()
         return cnt
     else:
         raise LookupError("No Such Collection")
@@ -169,11 +156,8 @@ def delete_alert(query):
 
 def __remove(ty, query):
     if ty in collections:
-        client = MongoClient()
-        db = client[__DATABASE]
         collection = db[collections[ty]]
         collection.remove(query)
-        client.close()
     else:
         raise LookupError("No Such Collection")
 

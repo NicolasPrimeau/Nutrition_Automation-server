@@ -90,7 +90,14 @@ def get_data(ty, query=dict(), single=False,sort=""):
                 results.append(ar)
 
         else:
-            results = collection.find_one(query)
+            if query={} and not sort == "":
+                results = collection.find_one()
+            elif query == {} and sort != "":
+                results = collection.find_one().sort(sort, 1)
+            elif sort != "":
+                results = collection.find_one(query).sort(sort, 1)
+            else:
+                results = collection.find_one(query)
         client.close()
         return results
     else:

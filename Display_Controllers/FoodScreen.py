@@ -25,6 +25,11 @@ class DataGrid(GridLayout):
         self.clear_widgets()
 
         bins = controller.sort_bin(database_interface.get_data(database_interface.CONFIG.BINS))
+        temp = list()
+        for b in bins:
+            temp.append(b)
+        bins = temp
+
         if len(bins) <= 3:
             self.rows = 1
             self.cols = len(bins)
@@ -32,18 +37,17 @@ class DataGrid(GridLayout):
             self.rows = 2
             self.cols = 3
 
-
         for bin in bins:
             b = GridLayout(cols=1, rows=3)
 
             b.add_widget(Label(text=bin['name'].capitalize(), font_size=40, size_hint_y=0.2))
 
-            last_entry = database_interface.get_data(database_interface.FOOD, query={'bin': bin['bin']}, sort="date")
+            last_entry = database_interface.get_data(database_interface.FOOD, query={'bin': bin['bin']}, sort="date", single=True)
 
-            if len(last_entry) == 0:
-                prog = 0
-            else:
+            try:
                 prog = last_entry[-1]['quantity']
+            except IndexError as e:
+                prog = 0
 
             if bin['display_type'] == 0:
                 b.add_widget(Label(text=("{0:.1f}".format(prog)+" g"), size_hint_y=0.2, font_size=30))

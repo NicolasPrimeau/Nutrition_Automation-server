@@ -96,7 +96,7 @@ class UpdateAlertDetailGrid(GridLayout):
             description = alert.selection[0].text
 
             alert = database_interface.get_data(database_interface.ALERT, {'description': description})
-            alert = alert[0]
+            alert = alert[0] 
             self.add_widget(AlertTextInput(text=alert['description'], multiline=False))
             self.add_widget(AlertTextInput(text=str(alert['flag']['min']), multiline=False))
             self.add_widget(AlertTextInput(text=str(alert['flag']['max']), multiline=False))

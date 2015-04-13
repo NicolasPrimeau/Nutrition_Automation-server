@@ -66,40 +66,43 @@ def _check_time_alerts():
         query['date'] = {'$gte': time}
 
         data_since = database_interface.get_data(database_interface.FOOD, query)
-        if len(data_since) < 5:
-            continue
 
         query = dict()
         query['target_bins'] = bin['bin']
         query['type'] = 'quantity'
 
         al = database_interface.get_data(database_interface.ALERT, query)
-        if len(al) == 0:
-            minimum = 0
-        else:
+        try:
             al = al[0]
             minimum = al['flag']['min']
+        except IndexError:
+            minimum = 0
 
         data_since = __sort_by_date(data_since)
+        if len(data_since) < 5:
+            continue
 
         misses = 0
         last_miss = False
         first = 0
         f = e = 0
 
-        for i in range(len(data_since)):
-            if data_since[i]['quantity'] < minimum:
+        l = 0
+        for data in data_since:
+            l += 1
+            if data['quantity'] < minimum:
                 if not last_miss:
                     last_miss = True
-                    first = i
+                    first = l
                     misses += 1
                 else:
                     misses += 1
             elif last_miss:
                 if i-first > e-f:
                     f = first
-                    e = i
+                    e = l
                 last_miss = False
+
 
         i = guide['pantry']['min'].split(",")
         unit = "days"
@@ -128,16 +131,23 @@ def _check_time_alerts():
     return alerts
 
 def __sort_by_date(data_since):
-    for index in range(1, len(data_since)):
-        currentvalue = data_since[index]
+    index = 0
+    temp = list()
+    temp.append(data_since[0])
+    for currentValue in data_since:
+        if index == 0:
+            index +=1
+            continue
         position = index
+        temp.append(currentValue)
 
         while position > 0 and data_since[position-1]['date'] > currentvalue['date']:
-            data_since[position] = data_since[position-1]
+            temp[position] = temp[position-1]
             position -= 1
 
         data_since[position] = currentvalue
-    return data_since
+        index += 1
+    return temp
 
 
 

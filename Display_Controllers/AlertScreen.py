@@ -27,8 +27,14 @@ class MessagesList(ListView):
         concerns = database_interface.get_data(database_interface.DETECTED_CONCERNS)
         msgs = list()
         #msgs.append(" ")
+        flag = True
+        try:
+            concerns[0]
+        except IndexError as e:
+            flag = False
 
-        if len(concerns) != 0:
+
+        if flag:
             concerns = concerns[0]['info']
             for msg in concerns:
                 msg = msg['message']['plain'].split(" ")

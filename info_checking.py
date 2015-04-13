@@ -95,12 +95,11 @@ def _check_time_alerts():
                     misses += 1
                 else:
                     misses += 1
-                continue
             elif last_miss:
                 if i-first > e-f:
                     f = first
                     e = i
-            last_miss = False
+                last_miss = False
 
         i = guide['pantry']['min'].split(",")
         unit = "days"
@@ -119,11 +118,9 @@ def _check_time_alerts():
         info['date'] = datetime.datetime.now()
 
         if (data_since[e]['date']-data_since[f]['date']) >= time:
-            print("\nTime delta\n")
             info['msg'] = "The food was out of the fridge for longer than the recommended time, it may be bad."
             alerts.append(__create_time_message(info))
-        elif misses < 3:
-            print("\nMisses:" + str(misses) + "\n")
+        elif 240 < misses:
             info['msg'] = "The food has possibly spoiled"
             alerts.append(__create_time_message(info))
 

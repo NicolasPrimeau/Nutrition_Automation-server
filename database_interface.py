@@ -90,7 +90,7 @@ def get_data(ty, query=dict(), single=False,sort=""):
                 results.append(ar)
 
         else:
-            if query={} and not sort == "":
+            if query == {} and not sort == "":
                 results = collection.find_one()
             elif query == {} and sort != "":
                 results = collection.find_one().sort(sort, 1)

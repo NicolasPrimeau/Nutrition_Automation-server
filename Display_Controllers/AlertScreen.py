@@ -26,7 +26,7 @@ class MessagesList(ListView):
 
         concerns = database_interface.get_data(database_interface.DETECTED_CONCERNS)
         msgs = list()
-        msgs.append(" ")
+        #msgs.append(" ")
 
         if len(concerns) != 0:
             concerns = concerns[0]['info']
@@ -34,16 +34,21 @@ class MessagesList(ListView):
                 msg = msg['message']['plain'].split(" ")
                 while len(msg) > 0:
                     line = msg.pop(0)
-                    while (len(line) + 1 + len(msg[0])) < 50:
+                    if len(msg) == 0:
+                        msgs.append(line)
+                        msgs.append(" ")
+                        break
+                    while (len(line) + 1 + len(msg[0])) < 40:
                         line += " " + msg.pop(0)
                         if len(msg) == 0:
                             break
                     msgs.append(line)
                 msgs.append(" ")
 
+        msgs.pop()
         list_item_args_converter = lambda row_index, text: {
             'text': text,
-            'height': 50,
+            'height': 15,
             'font_size': 30
         }
 

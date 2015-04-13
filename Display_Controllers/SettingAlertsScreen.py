@@ -42,7 +42,7 @@ class SettingAlertList(ListView):
             'text': obj.text,
             'font_size': 30,
             'height': 100,
-            'select ed_color': [0.2, 5, 0.5, 1.],
+            'selected_color': [0.2, 5, 0.5, 1.],
             'deselected_color': [1, 1, 1, 1.],
             'background_color': [1, 1, 1, 0.],
             'background_normal': "Images/Box.png",

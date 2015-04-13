@@ -124,7 +124,7 @@ class BinGrid(GridLayout):
         self.rows = 2
         self.padding = 10
         for i in range(database_interface.count(database_interface.CONFIG.BINS)):
-            if i in target:
+            if (i+1) in target:
                 self.add_widget(BinChoice(text="Bin "+str(i+1), picked=True))
             else:
                 self.add_widget(BinChoice(text="Bin "+str(i+1)))

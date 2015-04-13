@@ -8,8 +8,8 @@ import database_interface
 import signal
 import info_checking
 import data_input
+
 if "--no-gui" not in sys.argv:
-    from kivy.base import runTouchApp
     import display_controller
 
 
@@ -19,12 +19,10 @@ def main():
     setup()
 
     # Start Info checking
-    # !! Not Implemented !!
     processes.append(Process(target=check_info))
 
     # start Database Management
-    # !! Not Implemented !!
-    processes.append(Process(target = database_management))
+    processes.append(Process(target=database_management))
 
     # start auto IP configuration server
     processes.append(Process(target=auto_ip))
@@ -33,7 +31,6 @@ def main():
     processes.append(Process(target=start_server))
 
     # Start GUI
-    # !! Not implemented !!
     if "--no-gui" not in sys.argv:
         processes.append(Process(target=start_gui))
 

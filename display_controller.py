@@ -27,6 +27,7 @@ from Display_Controllers.UpdateAlert import UpdateAlertScreen
 from Display_Controllers.NewAlert import NewAlertScreen
 from Display_Controllers.ReportScreen import ReportScreen
 
+database_interface.__setup()
 
 def update_all_bins():
     bin_grid = MANAGER.get_screen("setting_areas").children[0].children[0]
@@ -39,7 +40,7 @@ def update_all_bins():
 
 
 def sort_bin(bins):
-    ar = [dict() for _ in range(len(bins))]
+    ar = [dict() for _ in range(database_interface.count(database_interface.CONFIG.BINS))]
 
     for bin in bins:
         ar[bin['bin']-1] = bin

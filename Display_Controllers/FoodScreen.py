@@ -45,7 +45,10 @@ class DataGrid(GridLayout):
             last_entry = database_interface.get_data(database_interface.FOOD, query={'bin': bin['bin']}, sort="date", single=True)
 
             try:
-                prog = last_entry[-1]['quantity']
+                if last_entry is None:
+                    prog = 0
+                else:
+                    prog = last_entry['quantity']
             except IndexError as e:
                 prog = 0
 

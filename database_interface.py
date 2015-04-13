@@ -84,12 +84,8 @@ def get_data(ty, query=dict(), single=False,sort=""):
             else:
                 iterator = collection.find(query)
         else:
-            if query == {} and not sort == "":
+            if query == {}:
                 iterator = collection.find_one()
-            elif query == {} and sort != "":
-                iterator = collection.find_one().sort(sort, 1)
-            elif sort != "":
-                iterator = collection.find_one(query).sort(sort, 1)
             else:
                 iterator = collection.find_one(query)
         return iterator

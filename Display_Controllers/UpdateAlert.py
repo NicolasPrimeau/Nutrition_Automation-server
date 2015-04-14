@@ -63,7 +63,7 @@ class UpdateAlertScreen(Screen):
 
         controller.MANAGER.get_screen("setting_alerts").children[0].children[0].children[0].update_alerts()
         controller.MANAGER.transition.direction = 'right'
-        controller.MANAGER.current = "setting_alerts"
+        controller.MANAGER.current = "main"
 
     def delete_alert(self):
         alert = controller.MANAGER.get_screen("setting_alerts").children[0].children[0].children[0]
@@ -77,7 +77,7 @@ class UpdateAlertScreen(Screen):
 
         controller.MANAGER.get_screen("setting_alerts").children[0].children[0].children[0].update_alerts()
         controller.MANAGER.transition.direction = 'right'
-        controller.MANAGER.current = "setting_alerts"
+        controller.MANAGER.current = "main"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

@@ -31,7 +31,7 @@ class UpdateContactScreen(Screen):
 
         controller.MANAGER.get_screen("setting_contact").children[0].children[0].children[0].update_contacts()
         controller.MANAGER.transition.direction = 'right'
-        controller.MANAGER.current = "setting_contact"
+        controller.MANAGER.current = "main"
 
     def delete_contact(self):
         contact = controller.MANAGER.get_screen("setting_contact").children[0].children[0].children[0]
@@ -45,7 +45,7 @@ class UpdateContactScreen(Screen):
 
         controller.MANAGER.get_screen("setting_contact").children[0].children[0].children[0].update_contacts()
         controller.MANAGER.transition.direction = 'right'
-        controller.MANAGER.current = "setting_contact"
+        controller.MANAGER.current = "main"
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

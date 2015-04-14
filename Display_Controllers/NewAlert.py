@@ -62,7 +62,7 @@ class NewAlertScreen(Screen):
 
         controller.MANAGER.get_screen("setting_alerts").children[0].children[0].children[0].update_alerts()
         controller.MANAGER.transition.direction = 'right'
-        controller.MANAGER.current = "setting_alerts"
+        controller.MANAGER.current = "main"
         info.reset()
 
     def __init__(self, **kwargs):

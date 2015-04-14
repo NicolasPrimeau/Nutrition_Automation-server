@@ -51,7 +51,7 @@ class MessagesList(ListView):
         msgs.pop()
         list_item_args_converter = lambda row_index, text: {
             'text': text,
-            'height': 30,
+            'height': 35,
             'font_size': 30
         }
 

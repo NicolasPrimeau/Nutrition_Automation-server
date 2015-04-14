@@ -32,7 +32,7 @@ class SettingContactSubGrid(GridLayout):
 class SettingContactList(ListView):
 
     def update_contacts(self):
-        names = controller.database_interface.get_data(database_interface.CONTACT)
+        names = controller.database_interface.get_data(database_interface.CONTACT, {})
         li = list()
 
         for name in names:
@@ -58,4 +58,3 @@ class SettingContactList(ListView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.update_contacts()
-

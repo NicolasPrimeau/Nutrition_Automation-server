@@ -65,15 +65,23 @@ def __setup():
 # Data is a dictionary, type is a string or integer
 def store_data(ty, data):
     if isinstance(data, dict) and ty in collections:
-        collection = db[collections[ty]]
+        try:
+            collection = db[collections[ty]]
+        except TypeError:
+            __setup()
+            collection = db[collections[ty]]
         collection.insert(data)
     else:
         raise LookupError("No Such Collection")
 
 
-def get_data(ty, query=dict(), single=False,sort=""):
+def get_data(ty, query, single=False, sort=""):
     if ty in collections:
-        collection = db[collections[ty]]
+        try:
+            collection = db[collections[ty]]
+        except TypeError:
+            __setup()
+            collection = db[collections[ty]]
         if not single:
             if query == {} and not sort == "":
                 iterator = collection.find()
@@ -97,16 +105,24 @@ def get_data(ty, query=dict(), single=False,sort=""):
 
 def update(ty, query, updat, create=False):
     if ty in collections:
-        collection = db[collections[ty]]
+        try:
+            collection = db[collections[ty]]
+        except TypeError:
+            __setup()
+            collection = db[collections[ty]]
         if collection.count() == 0 and create:
             collection.insert(updat)
         else:
             collection.update(query, updat)
 
 
-def count(ty, query=dict()):
+def count(ty):
     if ty in collections:
-        collection = db[collections[ty]]
+        try:
+            collection = db[collections[ty]]
+        except TypeError:
+            __setup()
+            collection = db[collections[ty]]
         cnt = collection.count()
         return cnt
     else:
@@ -124,7 +140,7 @@ def configure_bin(new_bin):
 
     update(CONFIG.BINS, {'bin': new_bin['bin']}, {'$set': new_bin})
 
-    for item in get_data(FOOD):
+    for item in get_data(FOOD, {}):
         del item['_id']
         item['bin_id'] = bin_id
         store_data(PURGED.DATA, item)
@@ -152,11 +168,11 @@ def delete_alert(query):
 
 def __remove(ty, query):
     if ty in collections:
-        collection = db[collections[ty]]
+        try:
+            collection = db[collections[ty]]
+        except TypeError:
+            __setup()
+            collection = db[collections[ty]]
         collection.remove(query)
     else:
         raise LookupError("No Such Collection")
-
-
-
-

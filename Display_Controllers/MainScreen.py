@@ -20,6 +20,7 @@ class MainScreen(Screen):
 
         controller.MANAGER.get_screen("report").children[-1].children[0].update()
 
+
 class MainGrid(GridLayout):
     pass
 

@@ -16,22 +16,22 @@ class NewContactScreen(Screen):
     def add_contact(self):
         info = controller.MANAGER.get_screen("new_contact").children[0].children[0]
         contact = dict()
-        if len(info.children[-1].text)>30:
+        if len(info.children[-1].text) > 30:
             contact['name'] = info.children[-1].text[0:30].lstrip().rstrip()
         else:
             contact['name'] = info.children[-1].text.lstrip().rstrip()
-        if len(info.children[-2].text)>40 and '@' in info[-2]:
+        if len(info.children[-2].text) > 40 and '@' in info[-2]:
             contact['email'] = info.children[-2].text[0:40].lstrip().rstrip()
         elif '@' in info.children[-2].text:
             contact['email'] = info.children[-2].text.lstrip().rstrip()
         else:
             contact['email'] = ''
-        if len(info.children[-3].text)>10:
+        if len(info.children[-3].text) > 10:
             contact['phone'] = info.children[-3].text[0:10].lstrip().rstrip()
         else:
             contact['phone'] = info.children[-3].text.lstrip().rstrip()
 
-        if len(database_interface.get_data(database_interface.CONTACT, {'name': contact['name']}))== 0:
+        if len(database_interface.get_data(database_interface.CONTACT, {'name': contact['name']})) == 0:
             database_interface.store_data(database_interface.CONTACT, contact)
 
         controller.MANAGER.get_screen("setting_contact").children[0].children[0].children[0].update_contacts()
@@ -69,6 +69,7 @@ class ContactTextInput(TextInput):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.font_size = 30
+
 
 class SpaceGrid(GridLayout):
     pass

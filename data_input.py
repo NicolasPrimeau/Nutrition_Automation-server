@@ -1,6 +1,6 @@
 # The protocol to be used for now to test is the following:
-#-Incoming data must be plain text
-#-The text will be JSON
+# -Incoming data must be plain text
+# -The text will be JSON
 
 import database_interface
 import signal
@@ -12,13 +12,13 @@ import select
 import socket
 
 
-def startServer():
-    HOST = ''
-    PORT = 50001
-    ADDR = (HOST, PORT)
-    BUFSIZE = 1024
+def start_server():
+    host_og = ''
+    port_og = 50001
+    addr_og = (host_og, port_og)
+    bufsize_og = 1024
     serv = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    serv.bind((ADDR))
+    serv.bind(addr_og)
 
     def itrp_handler(signum, frame):
         sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
@@ -34,12 +34,12 @@ def startServer():
         # MODIFY if we are to allow additional data acquistion clients
         serv.listen(1)
 
-        conn, addr = serv.accept()
+        conn, _ = serv.accept()
 
-        #print("Accepted connection")
+        # print("Accepted connection")
 
         while 1:
-            data = conn.recv(BUFSIZE)
+            data = conn.recv(bufsize_og)
             if not data:
                 break
             database_interface.store_data(database_interface.FOOD, decode_data(data))
@@ -49,8 +49,8 @@ def startServer():
 def decode_data(data):
     info = json.loads(data.decode("utf-8"))
     info['bin'] = int(info['bin'])
-    bin = database_interface.get_data(database_interface.CONFIG.BINS, {'bin': info['bin']})[0]
-    info['quantity'] = float(info['quantity']) - bin['calibration']
+    area = database_interface.get_data(database_interface.CONFIG.BINS, {'bin': info['bin']})[0]
+    info['quantity'] = float(info['quantity']) - area['calibration']
     if info['quantity'] < 0:
         info['quantity'] = 0
     info['date'] = datetime.datetime.now()
@@ -67,7 +67,7 @@ def auto_ip():
     s.setblocking(0)
 
     while True:
-        result = select.select([s],[],[])
+        result = select.select([s], [], [])
         msg, addr = result[0][0].recvfrom(buffer_size)
         addr = addr[0]
 
@@ -78,8 +78,4 @@ def auto_ip():
 
         if len(database_interface.get_data(database_interface.CLIENTS, {'ip': addr})) == 0:
             database_interface.store_data(database_interface.CLIENTS,
-                                      {'ip': addr, 'id': database_interface.count(database_interface.CLIENTS)})
-
-
-
-
+                                          {'ip': addr, 'id': database_interface.count(database_interface.CLIENTS)})

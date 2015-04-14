@@ -5,9 +5,9 @@ import datetime
 
 
 def check_data():
-    #consistency_check()
+    # consistency_check()
 
-    alerts = database_interface.get_data(database_interface.ALERT)
+    alerts = database_interface.get_data(database_interface.ALERT, {})
     messages = list()
 
     for msg in _check_time_alerts():
@@ -29,24 +29,25 @@ def check_data():
     # Alert_set is a set of flags raised by one configured alert
     database_interface.__remove(database_interface.PLAIN_TEXT_MESSAGES, {})
     for a in messages:
-        #For now !! Remove later
+        # For now !! Remove later
         print("\n\nAddress: " + ", ".join(a['address']))
         print("Subject: " + a['subject'])
         print("Message: " + a['message']['plain'])
         database_interface.store_data(database_interface.PLAIN_TEXT_MESSAGES,
                                       {'date': datetime.datetime.now(),
                                        'message': a['message']['plain']})
-        #alert.send_email(a['address'], a['subject'], a['message'])
-        #alert.send_text(a['phone_num'], a['message'])
+        # alert.send_email(a['address'], a['subject'], a['message'])
+        # alert.send_text(a['phone_num'], a['message'])
 
 
 def _check_time_alerts():
 
     alerts = list()
 
-    for bin in database_interface.get_data(database_interface.CONFIG.BINS, {'bin': {'$gt': 0}}):
-        guide = database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME, {'name': bin['name'].lower()}, single=True)
-        if guide == None:
+    for area in database_interface.get_data(database_interface.CONFIG.BINS, {'bin': {'$gt': 0}}):
+        guide = database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME,
+                                            {'name': area['name'].lower()}, single=True)
+        if guide is None:
             return []
 
         i = guide['fridge']['min'].split(",")
@@ -62,13 +63,13 @@ def _check_time_alerts():
         if unit == "hours":
             time = datetime.datetime.now() - datetime.timedelta(hours=int(time))
         query = dict()
-        query['bin'] = bin['bin']
+        query['bin'] = area['bin']
         query['date'] = {'$gte': time}
 
         data_since = database_interface.get_data(database_interface.FOOD, query)
 
         query = dict()
-        query['target_bins'] = bin['bin']
+        query['target_bins'] = area['bin']
         query['type'] = 'quantity'
 
         al = database_interface.get_data(database_interface.ALERT, query)
@@ -103,7 +104,6 @@ def _check_time_alerts():
                     e = l
                 last_miss = False
 
-
         i = guide['pantry']['min'].split(",")
         unit = "days"
         i[0] = i[0].split(" ")
@@ -117,7 +117,7 @@ def _check_time_alerts():
             time = datetime.timedelta(hours=int(time))
 
         info = dict()
-        info['bin'] = bin['bin']
+        info['bin'] = area['bin']
         info['date'] = datetime.datetime.now()
 
         if (data_since[e]['date']-data_since[f]['date']) >= time:
@@ -130,25 +130,25 @@ def _check_time_alerts():
 
     return alerts
 
+
 def __sort_by_date(data_since):
     index = 0
     temp = list()
     temp.append(data_since[0])
     for currentValue in data_since:
         if index == 0:
-            index +=1
+            index += 1
             continue
         position = index
         temp.append(currentValue)
 
-        while position > 0 and data_since[position-1]['date'] > currentvalue['date']:
+        while position > 0 and data_since[position-1]['date'] > currentValue['date']:
             temp[position] = temp[position-1]
             position -= 1
 
-        data_since[position] = currentvalue
+        data_since[position] = currentValue
         index += 1
     return temp
-
 
 
 def _check_quantity_alert(al):
@@ -225,7 +225,6 @@ def consistency_check():
         stats_data[item['bin']]['avg'] += item['quantity']
         stats_data[item['bin']]['cnt'] += 1
 
-
     # calc average
     for key, stats in stats_data:
         stats_data[key]['avg'] /= stats_data[key]['cnt']
@@ -239,7 +238,7 @@ def consistency_check():
 
     for key, stats in stats_data:
         stats_data[key]['std_dev'] = (stats_data[key]['std_dev'] / (
-        stats_data[key]['cnt'] - stats_data[key]['cnt'] != 1) ) ** (1 / 2)
+            stats_data[key]['cnt'] - stats_data[key]['cnt'] != 1)) ** (1 / 2)
 
     # Check the amount of outliers
 
@@ -256,7 +255,7 @@ def consistency_check():
 
 def __create_quantity_message(info):
 
-    contacts = database_interface.get_data(database_interface.CONTACT)
+    contacts = database_interface.get_data(database_interface.CONTACT, {})
 
     msg = dict()
     msg['address'] = []
@@ -287,7 +286,7 @@ def __create_quantity_message(info):
 
 def __create_time_message(info):
 
-    contacts = database_interface.get_data(database_interface.CONTACT)
+    contacts = database_interface.get_data(database_interface.CONTACT, {})
 
     msg = dict()
     msg['address'] = list()
@@ -306,9 +305,7 @@ def __create_time_message(info):
     msg['message']['plain'] = "Stock for Bin " + str(info['bin'])+": "
     msg['message']['html'] = "<p>" + "Stock for Bin " + str(info['bin']) + ":\n "
 
-
     msg['message']['plain'] += info['msg']
     msg['message']['html'] += info['msg']+"</p><br>"
 
     return msg
-

@@ -14,6 +14,7 @@ Builder.load_file('Kivy_Layouts/UpdateAlert.kv')
 
 
 class UpdateAlertScreen(Screen):
+
     def add_alert(self):
 
         info = controller.MANAGER.get_screen("setting_update_alert").children[0].children[0]
@@ -37,7 +38,7 @@ class UpdateAlertScreen(Screen):
             elif temp > 10000:
                 temp = 10000
             alarm['flag']['min'] = temp
-        except ValueError as e:
+        except ValueError:
             alarm['flag']['min'] = 0
 
         try:
@@ -49,7 +50,7 @@ class UpdateAlertScreen(Screen):
             elif temp > 10000:
                 temp = 10000
             alarm['flag']['max'] = temp
-        except ValueError as e:
+        except ValueError:
             alarm['flag']['max'] = 0
 
         bin_boxes_root = info.children[-4]
@@ -107,7 +108,6 @@ class UpdateAlertDetailGrid(GridLayout):
             self.add_widget(AlertTextInput(hint_text="Maximum", multiline=False))
             self.add_widget(BinGrid())
 
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.add_widget(AlertTextInput(hint_text="Description", multiline=False))
@@ -144,6 +144,7 @@ class BinCheckBox(CheckBox):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.size = (100, 100)
+
 
 class AlertTextInput(TextInput):
     def __init__(self, **kwargs):

@@ -7,7 +7,6 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.listview import ListView, ListItemLabel
 from kivy.adapters.listadapter import ListAdapter
 import database_interface
-import re
 
 Builder.load_file('Kivy_Layouts/AlertScreen.kv')
 
@@ -24,15 +23,13 @@ class MessagesList(ListView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        concerns = database_interface.get_data(database_interface.DETECTED_CONCERNS)
+        concerns = database_interface.get_data(database_interface.DETECTED_CONCERNS, {})
         msgs = list()
-        #msgs.append(" ")
         flag = True
         try:
             concerns[0]
-        except IndexError as e:
+        except IndexError:
             flag = False
-
 
         if flag:
             concerns = concerns[0]['info']
@@ -54,7 +51,7 @@ class MessagesList(ListView):
         msgs.pop()
         list_item_args_converter = lambda row_index, text: {
             'text': text,
-            'height': 15,
+            'height': 30,
             'font_size': 30
         }
 

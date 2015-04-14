@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-#setup script
+# setup script
 
 from distutils.core import setup
 import importlib

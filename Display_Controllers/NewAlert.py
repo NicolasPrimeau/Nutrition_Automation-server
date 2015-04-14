@@ -38,7 +38,7 @@ class NewAlertScreen(Screen):
             elif temp > 10000:
                 temp = 10000
             alarm['flag']['min'] = temp
-        except ValueError as e:
+        except ValueError:
             alarm['flag']['min'] = 0
 
         try:
@@ -50,7 +50,7 @@ class NewAlertScreen(Screen):
             elif temp > 10000:
                 temp = 10000
             alarm['flag']['max'] = temp
-        except ValueError as e:
+        except ValueError:
             alarm['flag']['max'] = 0
 
         bin_boxes_root = info.children[-4]
@@ -80,7 +80,6 @@ class NewAlertDetailGrid(GridLayout):
         self.add_widget(AlertTextInput(hint_text="Minimum", multiline=False))
         self.add_widget(AlertTextInput(hint_text="Maximum", multiline=False))
         self.add_widget(BinGrid())
-
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

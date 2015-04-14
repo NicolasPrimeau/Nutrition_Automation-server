@@ -9,9 +9,10 @@ import Report
 
 Builder.load_file('Kivy_Layouts/ReportScreen.kv')
 
+
 def normalize(line, separator=' '):
-    while(len(line) < 50):
-        line = line + separator
+    while len(line) < 50:
+        line += separator
     return line
 
 
@@ -59,12 +60,12 @@ class ReportView(ListView):
                     document.append('( No data )')
                     return
                 if title == "hourly":
-                    format = '%H:%M %a %d/%b'
+                    fmt = '%H:%M %a %d/%b'
                 else:
-                    format = '%a %d/%b'
+                    fmt = '%a %d/%b'
                 for decade in con:
-                    document.append(decade['start time'].strftime(format) + ' to ' +
-                                    decade['end time'].strftime(format))
+                    document.append(decade['start time'].strftime(fmt) + ' to ' +
+                                    decade['end time'].strftime(fmt))
                     document.append('Decrease: ' + "{0:.2f}".format(decade['decrease']))
                     document.append('Increase: ' + "{0:.2f}".format(decade['increase']))
                     document.append('Difference: ' + "{0:.2f}".format(decade['difference']))

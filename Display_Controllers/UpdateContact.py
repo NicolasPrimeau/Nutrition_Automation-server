@@ -9,6 +9,7 @@ import display_controller as controller
 
 Builder.load_file('Kivy_Layouts/UpdateContact.kv')
 
+
 class UpdateContactScreen(Screen):
     
     def add_contact(self):
@@ -32,7 +33,6 @@ class UpdateContactScreen(Screen):
         controller.MANAGER.transition.direction = 'right'
         controller.MANAGER.current = "setting_contact"
 
-
     def delete_contact(self):
         contact = controller.MANAGER.get_screen("setting_contact").children[0].children[0].children[0]
 
@@ -46,7 +46,6 @@ class UpdateContactScreen(Screen):
         controller.MANAGER.get_screen("setting_contact").children[0].children[0].children[0].update_contacts()
         controller.MANAGER.transition.direction = 'right'
         controller.MANAGER.current = "setting_contact"
-
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)

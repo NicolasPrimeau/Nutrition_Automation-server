@@ -42,4 +42,3 @@ def send_email(address, subject, message):
     # s = smtplib.SMTP('127.0.0.1')
     s.sendmail(me, you, msg.as_string())
     s.close()
-

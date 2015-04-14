@@ -11,5 +11,3 @@ def sort_by_date(d_a):
             temp_ar.append(e)
 
     return temp_ar
-
-

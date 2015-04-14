@@ -25,15 +25,16 @@ class SettingListGrid(GridLayout):
         super().__init__(**kwargs)
         self.add_widget(SettingAreasList())
 
+
 class SettingAreasList(ListView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        bins = controller.sort_bin(database_interface.get_data(database_interface.CONFIG.BINS))
+        bins = controller.sort_bin(database_interface.get_data(database_interface.CONFIG.BINS, {}))
         areas = list()
 
-        for bin in bins:
-            areas.append(controller.DataItem('Bin ' + str(bin['bin']) + ': ' + bin['name'].capitalize()))
+        for area in bins:
+            areas.append(controller.DataItem('Bin ' + str(area['bin']) + ': ' + area['name'].capitalize()))
 
         list_item_args_converter = lambda row_index, obj: {
             'text': obj.text,
@@ -51,4 +52,3 @@ class SettingAreasList(ListView):
                                    propagate_selection_to_data=True,
                                    cls=ListItemButton)
         self.adapter.bind(on_selection_change=controller.go_to_update)
-

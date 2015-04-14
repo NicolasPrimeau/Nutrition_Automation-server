@@ -27,7 +27,6 @@ from Display_Controllers.UpdateAlert import UpdateAlertScreen
 from Display_Controllers.NewAlert import NewAlertScreen
 from Display_Controllers.ReportScreen import ReportScreen
 
-database_interface.__setup()
 
 def update_all_bins():
     bin_grid = MANAGER.get_screen("setting_areas").children[0].children[0]
@@ -42,15 +41,15 @@ def update_all_bins():
 def sort_bin(bins):
     ar = [dict() for _ in range(database_interface.count(database_interface.CONFIG.BINS))]
 
-    for bin in bins:
-        ar[bin['bin']-1] = bin
+    for area in bins:
+        ar[area['bin']-1] = area
     bins = ar
     return bins
 
 
 def update_and_view_food():
     MANAGER.transition.direction = 'down'
-    MANAGER.current="food"
+    MANAGER.current = "food"
     bin_grid = MANAGER.get_screen("food").children[0]
     bin_grid.children[1].update()
 
@@ -84,6 +83,7 @@ def go_to_alert(value):
     MANAGER.get_screen("setting_update_alert").children[0].children[0].update()
     MANAGER.transition.direction = 'left'
     MANAGER.current = "setting_update_alert"
+
 
 class DataItem(SelectableDataItem):
     text = ""

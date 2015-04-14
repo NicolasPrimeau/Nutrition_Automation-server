@@ -72,7 +72,7 @@ def check_info():
         time.sleep(7200)
 
 
-def check_info_exit_handler(signum,frame):
+def check_info_exit_handler(signum, frame):
     sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
     sys.stdout.write("Terminating info checking process...")
     sys.stdout.write("Terminated!\n")
@@ -115,7 +115,7 @@ def start_server():
         sys.stdout.write(time.strftime("%d-%m-%Y - %H:%M") + "  ")
         sys.stdout.write("Data input server... Started\n")
 
-        data_input.startServer()
+        data_input.start_server()
 
         # We should never reach this point,
         # the loop is completely for redundancy
@@ -123,5 +123,3 @@ def start_server():
 
 if __name__ == "__main__":
     main()
-
-

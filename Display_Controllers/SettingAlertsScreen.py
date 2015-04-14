@@ -32,7 +32,7 @@ class SettingAlertSubGrid(GridLayout):
 
 class SettingAlertList(ListView):
     def update_alerts(self):
-        names = controller.database_interface.get_data(database_interface.ALERT)
+        names = controller.database_interface.get_data(database_interface.ALERT, {})
         li = list()
 
         for name in names:
@@ -58,4 +58,3 @@ class SettingAlertList(ListView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.update_alerts()
-

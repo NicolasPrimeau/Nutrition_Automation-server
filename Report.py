@@ -8,62 +8,62 @@ def generate_consumption_report(days, hours=0):
     delay = datetime.datetime.now() - datetime.timedelta(days=days, hours=hours)
 
     report = list()
-    food_data = database.get_data(database.FOOD)
-    purged_data = database.get_data(database.PURGED.DATA)
-    for bin in database.get_data(database.CONFIG.BINS):
+    food_data = database.get_data(database.FOOD, {})
+    purged_data = database.get_data(database.PURGED.DATA, {})
+    for area in database.get_data(database.CONFIG.BINS, {}):
         temp = dict()
-        temp['bin'] = bin['bin']
-        temp['name'] = bin['name']
-        temp['type'] = bin['type']
+        temp['bin'] = area['bin']
+        temp['name'] = area['name']
+        temp['type'] = area['type']
         temp['date of purged'] = None
         temp['consumption'] = dict()
         if hours >= 1:
-            temp['consumption']['hourly'] = _consumption_hourly(bin['bin'], food_data)
+            temp['consumption']['hourly'] = _consumption_hourly(area['bin'], food_data)
         if days >= 1:
-            temp['consumption']['daily'] = _consumption_daily(bin['bin'], food_data)
+            temp['consumption']['daily'] = _consumption_daily(area['bin'], food_data)
         if days >= 7:
-            temp['consumption']['weekly'] = _consumption_weekly(bin['bin'], food_data)
+            temp['consumption']['weekly'] = _consumption_weekly(area['bin'], food_data)
         if days >= 30:
-            temp['consumption']['monthly'] = _consumption_monthly(bin['bin'], food_data)
+            temp['consumption']['monthly'] = _consumption_monthly(area['bin'], food_data)
         report.append(temp)
 
     # add purged bins
-    for bin in database.get_data(database.PURGED.BINS):
-        if bin['date'] < delay:
+    for area in database.get_data(database.PURGED.BINS, {}):
+        if area['date'] < delay:
             continue
         temp = dict()
-        temp['bin'] = bin['bin']
-        temp['name'] = bin['name']
-        temp['type'] = bin['type']
-        temp['date of purged'] = bin['date']
+        temp['bin'] = area['bin']
+        temp['name'] = area['name']
+        temp['type'] = area['type']
+        temp['date of purged'] = area['date']
         temp['consumption'] = dict()
         if hours >= 1:
-            temp['consumption']['hourly'] = _consumption_hourly(bin['bin_id'], purged_data)
+            temp['consumption']['hourly'] = _consumption_hourly(area['bin_id'], purged_data)
         if days >= 1:
-            temp['consumption']['daily'] = _consumption_daily(bin['bin_id'], purged_data)
+            temp['consumption']['daily'] = _consumption_daily(area['bin_id'], purged_data)
         if days >= 7:
-            temp['consumption']['weekly'] = _consumption_weekly(bin['bin_id'], purged_data)
+            temp['consumption']['weekly'] = _consumption_weekly(area['bin_id'], purged_data)
         if days >= 30:
-            temp['consumption']['monthly'] = _consumption_monthly(bin['bin_id'], purged_data)
+            temp['consumption']['monthly'] = _consumption_monthly(area['bin_id'], purged_data)
         report.append(temp)
 
     return report
 
 
-def _consumption_hourly(id, location):
-    return __consumption(id, location, datetime.timedelta(hours=1))
+def _consumption_hourly(bin_id, location):
+    return __consumption(bin_id, location, datetime.timedelta(hours=1))
 
 
-def _consumption_daily(id, location):
-    return __consumption(id, location, datetime.timedelta(days=1))
+def _consumption_daily(bin_id, location):
+    return __consumption(bin_id, location, datetime.timedelta(days=1))
 
 
-def _consumption_weekly(id, location):
-    return __consumption(id, location, datetime.timedelta(weeks=1))
+def _consumption_weekly(bin_id, location):
+    return __consumption(bin_id, location, datetime.timedelta(weeks=1))
 
 
-def _consumption_monthly(id, location):
-    return __consumption(id, location, datetime.timedelta(days=30))
+def _consumption_monthly(bin_id, location):
+    return __consumption(bin_id, location, datetime.timedelta(days=30))
 
 
 def __consumption(query, location, time_delta):
@@ -109,8 +109,6 @@ def __consumption(query, location, time_delta):
             ret_val.append(temp)
             
     return ret_val
-
-
 
 
 def __get_start(start, td):

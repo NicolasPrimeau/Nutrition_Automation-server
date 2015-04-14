@@ -14,30 +14,32 @@ Builder.load_file('Kivy_Layouts/SettingGeneral.kv')
 
 
 class SettingGeneralScreen(Screen):
+
     def set_general_settings(self):
         info = controller.MANAGER.get_screen("setting_general").children[-1].children[0]
         for bin_grid in info.children:
             if isinstance(bin_grid, BinGrid):
                 if isinstance(bin_grid.children[-1], Label) and len(bin_grid.children) > 2:
-                    bin = bin_grid.children[-1].text.split(":")[0]
-                    bin = int(bin.split(" ")[-1])
+                    area = bin_grid.children[-1].text.split(":")[0]
+                    area = int(area.split(" ")[-1])
                     if bin_grid.children[0].state == "down":
-                        db.update(db.CONFIG.BINS, {'bin':  bin}, {'$set': {'display_type': 1}})
+                        db.update(db.CONFIG.BINS, {'bin':  area}, {'$set': {'display_type': 1}})
                     elif bin_grid.children[1].state == "down":
-                        db.update(db.CONFIG.BINS, {'bin':  bin}, {'$set': {'display_type': 0}})
+                        db.update(db.CONFIG.BINS, {'bin':  area}, {'$set': {'display_type': 0}})
 
         controller.MANAGER.transition.direction = 'left'
         controller.MANAGER.current = "main"
 
     def calibrate(self):
-        for bin in db.get_data(db.CONFIG.BINS):
+        for area in db.get_data(db.CONFIG.BINS, {}):
             avg = 0
-            for data in db.get_data(db.FOOD, {'bin' : bin['bin']})[-3:-1]:
+            for data in db.get_data(db.FOOD, {'bin': area['bin']})[-3:-1]:
                 avg += float(data['quantity'])
             avg /= 2
-            db.update(db.CONFIG.BINS, {'bin': bin['bin']}, {'$set': {'calibration': avg}})
+            db.update(db.CONFIG.BINS, {'bin': area['bin']}, {'$set': {'calibration': avg}})
         controller.MANAGER.transition.direction = 'right'
         controller.MANAGER.current = "main"
+
 
 class SettingGeneralGrid(GridLayout):
     pass
@@ -55,14 +57,14 @@ class SettingPanel(GridLayout):
         self.cols = 1
 
         self.add_widget(Button(
-                background_normal="Images/blank.png",
-                text="Calibrate",
-                color=(0,0,0,1),
-                font_size=30,
-                on_press=SettingGeneralScreen.calibrate
+            background_normal="Images/blank.png",
+            text="Calibrate",
+            color=(0, 0, 0, 1),
+            font_size=30,
+            on_press=SettingGeneralScreen.calibrate
         ))
         i = 0
-        for entry in db.get_data(db.CONFIG.BINS):
+        for entry in db.get_data(db.CONFIG.BINS, {}):
             gui = db.get_data(db.GUIDELINES.SHELF_TIME, {'name': entry['name']})[0]
             self.add_widget(BinGrid(entry['bin'], entry['display_type'],
                                     dual=(gui['unit'] is not None), name=entry['name']))
@@ -77,26 +79,25 @@ class SettingPanel(GridLayout):
 
 
 class BinGrid(GridLayout):
-    def __init__(self, bin, type, dual, name="", **kwargs):
+    def __init__(self, area, cat, dual, name="", **kwargs):
         super().__init__(**kwargs)
         self.rows = 1
         self.cols = 3
-        self.add_widget(Label(text="Bin "+str(bin) + (len(name)>0)*(": " + name.capitalize()), font_size=30,
+        self.add_widget(Label(text="Bin "+str(area) + (len(name) > 0)*(": " + name.capitalize()), font_size=30,
                               size_hint_x=0.6))
 
         if not dual:
             self.add_widget(Label(text="Weight Only", font_size=30, size_hint_x=0.4))
-        elif type == 0:
-            self.add_widget(ToggleButton(text="Weight", font_size=30, group="bin"+str(bin), state="down",
+        elif cat == 0:
+            self.add_widget(ToggleButton(text="Weight", font_size=30, group="bin"+str(area), state="down",
                                          padding=(5, 5), size_hint_x=0.2))
         else:
-            self.add_widget(ToggleButton(text="Weight", font_size=30, group="bin"+str(bin),
+            self.add_widget(ToggleButton(text="Weight", font_size=30, group="bin"+str(area),
                                          padding=(5, 5), size_hint_x=0.2))
 
-        if type == 1 and dual:
-            self.add_widget(ToggleButton(text="Unit", group="bin"+str(bin), state="down", font_size=30,
+        if cat == 1 and dual:
+            self.add_widget(ToggleButton(text="Unit", group="bin"+str(area), state="down", font_size=30,
                                          padding=(5, 5), size_hint_x=0.2))
         elif dual:
-            self.add_widget(ToggleButton(text="Unit", group="bin"+str(bin), font_size=30,
+            self.add_widget(ToggleButton(text="Unit", group="bin"+str(area), font_size=30,
                                          padding=(5, 5), size_hint_x=0.2))
-

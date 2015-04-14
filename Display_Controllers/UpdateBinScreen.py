@@ -23,15 +23,14 @@ class UpdateBinScreen(Screen):
 
         bin_list = controller.MANAGER.get_screen("setting_areas").children[0].children[0].children[0]
 
-        bin = bin_list.adapter.selection[0].text.split(":")[0].split(" ")[-1]
+        area = bin_list.adapter.selection[0].text.split(":")[0].split(" ")[-1]
 
         new_bin = dict()
-        new_bin['bin'] = int(bin)
+        new_bin['bin'] = int(area)
         new_bin['name'] = name_list.adapter.selection[0].text.lower()
         new_bin['type'] = type_list.adapter.selection[0].text.lower()
         new_bin['date'] = datetime.datetime.now()
         new_bin['display_type'] = 0
-
 
         controller.MANAGER.transition.direction = 'right'
         controller.MANAGER.current = 'main'
@@ -49,8 +48,9 @@ class UpdateBinGrid(GridLayout):
 
 
 class UpdateBinDetailGrid(GridLayout):
+
     def show_bin_names(self, ad):
-        #ad = self.children[0]
+        # ad = self.children[0]
         if len(ad.selection) == 0:
             return
 
@@ -83,15 +83,13 @@ class UpdateBinDetailGrid(GridLayout):
                          cls=ListItemButton)
         type_list.add_widget(ListView(adapter=ad))
 
-
-
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
         categories = list()
         words = list()
 
-        for entry in database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME):
+        for entry in database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME, {}):
 
             if entry['type'].capitalize() not in words:
                 categories.append(controller.DataItem(text=entry['type'].capitalize()))
@@ -117,4 +115,3 @@ class UpdateBinDetailGrid(GridLayout):
         ad.bind(on_selection_change=self.show_bin_names)
         self.add_widget(ListView(adapter=ad))
         self.add_widget(ListView())
-

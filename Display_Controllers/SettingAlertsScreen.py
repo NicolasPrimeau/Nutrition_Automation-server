@@ -52,6 +52,7 @@ class SettingAlertList(ListView):
         self.adapter = ListAdapter(data=li,
                                    args_converter=list_item_args_converter,
                                    propagate_selection_to_data=True,
+                                   allow_empty_selectio=False,
                                    cls=ListItemButton)
         self.adapter.bind(on_selection_change=controller.go_to_alert)
 

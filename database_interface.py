@@ -149,7 +149,7 @@ def configure_bin(new_bin):
 
 
 def _cleanup():
-    day = datetime.datetime.now() - datetime.timedelta(days=30)
+    day = datetime.datetime.now() - datetime.timedelta(days=7)
 
     __remove(FOOD, {'date': {'$lte': day}})
     __remove(PURGED.DATA, {'date': {'$lte': day}})

@@ -27,7 +27,7 @@ class SettingGeneralScreen(Screen):
                     elif bin_grid.children[1].state == "down":
                         db.update(db.CONFIG.BINS, {'bin':  area}, {'$set': {'display_type': 0}})
 
-        controller.MANAGER.transition.direction = 'left'
+        controller.MANAGER.transition.direction = 'right'
         controller.MANAGER.current = "main"
 
     def calibrate(self):

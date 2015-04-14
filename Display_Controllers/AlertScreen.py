@@ -52,7 +52,7 @@ class MessagesList(ListView):
         list_item_args_converter = lambda row_index, text: {
             'text': text,
             'height': 35,
-            'font_size': 30
+            'font_size': 25
         }
 
         self.adapter = ListAdapter(data=msgs,

@@ -60,7 +60,19 @@ class DataGrid(GridLayout):
             elif area['display_type'] == 1:
                 gui = database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME,
                                                   {'name': area['name']})[0]
-                b.add_widget(Label(text=str(int(math.floor(prog/gui['unit']))) + " Units", font_size=30))
+                units = prog/gui['unit']
+                if units - math.floor(units) < 0.25:
+                    units = int(math.floor(units))
+                    b.add_widget(Label(text=str(units) + " Units", font_size=30))
+                else:
+                    if units - math.floor(units) < 0.5:
+                        units = float(math.floor(units))+0.25
+                    elif units - math.floor(units) < 0.75:
+                        units = float(math.floor(units))+0.5
+                    else:
+                        units = float(math.floor(units))+0.75
+
+                    b.add_widget(Label(text=str("{0:.2f}".format(units)) + " Units", font_size=30))
                 b.add_widget(Label(text=""))
             elif area['display_type'] == 2:
                 b.add_widget(Label(text=("{0:.1f}".format(prog/1000)+" L"), size_hint_y=0.2, font_size=30))

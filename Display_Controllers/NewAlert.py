@@ -77,8 +77,8 @@ class NewAlertDetailGrid(GridLayout):
     def reset(self):
         self.clear_widgets()
         self.add_widget(AlertTextInput(hint_text="Description", multiline=False))
-        self.add_widget(AlertTextInput(hint_text="Minimum", multiline=False))
-        self.add_widget(AlertTextInput(hint_text="Maximum", multiline=False))
+        self.add_widget(AlertTextInput(hint_text="Minimum: 0 grams", multiline=False))
+        self.add_widget(AlertTextInput(hint_text="Maximum: 3000 grams", multiline=False))
         self.add_widget(BinGrid())
 
     def __init__(self, **kwargs):

@@ -55,13 +55,18 @@ class DataGrid(GridLayout):
 
             if area['display_type'] == 0:
                 b.add_widget(Label(text=("{0:.1f}".format(prog)+" g"), size_hint_y=0.2, font_size=30))
-                pb = ProgressBar(max=100, value=prog/100, padding=20, size_hint_y=0.6)
+                pb = ProgressBar(max=100, value=int((float(prog)/float(3000))*100), padding=20, size_hint_y=0.6)
                 b.add_widget(pb)
             elif area['display_type'] == 1:
                 gui = database_interface.get_data(database_interface.GUIDELINES.SHELF_TIME,
                                                   {'name': area['name']})[0]
                 b.add_widget(Label(text=str(int(math.floor(prog/gui['unit']))) + " Units", font_size=30))
                 b.add_widget(Label(text=""))
+            elif area['display_type'] == 2:
+                b.add_widget(Label(text=("{0:.1f}".format(prog/1000)+" L"), size_hint_y=0.2, font_size=30))
+                pb = ProgressBar(max=100, value=int((float(prog)/float(3000))*100), padding=20, size_hint_y=0.6)
+                b.add_widget(pb)
+
 
             self.add_widget(b)
 

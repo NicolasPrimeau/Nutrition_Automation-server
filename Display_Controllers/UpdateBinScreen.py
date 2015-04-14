@@ -30,7 +30,10 @@ class UpdateBinScreen(Screen):
         new_bin['name'] = name_list.adapter.selection[0].text.lower()
         new_bin['type'] = type_list.adapter.selection[0].text.lower()
         new_bin['date'] = datetime.datetime.now()
-        new_bin['display_type'] = 0
+        if new_bin['type'] == 'liquid':
+            new_bin['display_type'] = 2
+        else:
+            new_bin['display_type'] = 0
 
         controller.MANAGER.transition.direction = 'right'
         controller.MANAGER.current = 'main'

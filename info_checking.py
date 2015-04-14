@@ -132,9 +132,9 @@ def _check_time_alerts():
 
 
 def __sort_by_date(data_since):
-    data_since = [entry for _ in data_since]
+    data_since = [entry for entry in data_since]
     for index in range(1, len(data_since)):
-        currentvalue = data_since[index]
+        currentValue = data_since[index]
         position = index
 
         while position > 0 and data_since[position-1]['date'] > currentValue['date']:

@@ -132,23 +132,17 @@ def _check_time_alerts():
 
 
 def __sort_by_date(data_since):
-    index = 0
-    temp = list()
-    temp.append(data_since[0])
-    for currentValue in data_since:
-        if index == 0:
-            index += 1
-            continue
+    data_since = [entry for _ in data_since]
+    for index in range(1, len(data_since)):
+        currentvalue = data_since[index]
         position = index
-        temp.append(currentValue)
 
         while position > 0 and data_since[position-1]['date'] > currentValue['date']:
-            temp[position] = temp[position-1]
+            data_since[position] = data_since[position-1]
             position -= 1
 
         data_since[position] = currentValue
-        index += 1
-    return temp
+    return data_since
 
 
 def _check_quantity_alert(al):
